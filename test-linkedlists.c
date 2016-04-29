@@ -6,6 +6,7 @@ int main() {
 
     // Constructing a list
     llnode_t * test_list = malloc(sizeof(llnode_t));
+
     test_list->val = 3;
     test_list->next = malloc(sizeof(llnode_t));
     test_list->next->val = 2;
@@ -23,4 +24,6 @@ int main() {
     printf("List after removing 3\n");
     remove_by_value(&test_list, 3);
     print_list(test_list);
+
+    // Freeing the spae?
 }
