@@ -1,16 +1,16 @@
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
 
-typedef struct node {
+typedef struct llnode {
     int val;
-    struct node * next;
-} node_t;
+    struct llnode * next;
+} llnode_t;
 
 
-void print_list(node_t * head);
+void print_list(llnode_t * head);
 
-int pop(node_t ** head);
+int pop(llnode_t ** head);
 
-int remove_by_value(node_t ** head, int myval);
+int remove_by_value(llnode_t ** head, int myval);
 
 #endif
