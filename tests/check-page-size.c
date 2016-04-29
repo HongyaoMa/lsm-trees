@@ -1,3 +1,8 @@
+// Checking the page size of the system --- Unix based
+// The LSM Tree Project, CS265
+// Hongyao Ma
+// 04/29/2016
+
 #include <stdio.h>
 #include <unistd.h> /* sysconf(3) */
 
