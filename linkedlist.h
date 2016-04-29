@@ -7,10 +7,12 @@ typedef struct llnode {
 } llnode_t;
 
 
-void print_list(llnode_t * head);
+void ll_print_list(llnode_t * head);
 
-int pop(llnode_t ** head);
+int ll_pop(llnode_t ** head);
 
-int remove_by_value(llnode_t ** head, int myval);
+int ll_remove_by_value(llnode_t ** head, int myval);
+
+int ll_free_list(llnode_t **head);
 
 #endif

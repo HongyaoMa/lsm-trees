@@ -18,12 +18,21 @@ int main() {
 
     // print the list before removing all "3"'s
     printf("List before removing 3\n");
-    print_list(test_list);
+    ll_print_list(test_list);
 
     // print the list after removing all 3's
     printf("List after removing 3\n");
-    remove_by_value(&test_list, 3);
-    print_list(test_list);
+    ll_remove_by_value(&test_list, 3);
+
+    // DEBUG
+    // ll_remove_by_value(&test_list, 2);
+    // ll_remove_by_value(&test_list, 4);  
+
+    ll_print_list(test_list);
 
     // Freeing the spae?
+    // DEBUG
+    //printf("Free the list!\n");
+
+    ll_free_list(&test_list);
 }

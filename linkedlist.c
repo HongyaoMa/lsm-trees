@@ -3,7 +3,8 @@
 #include "linkedlist.h"
 
 
-void print_list(llnode_t * head) {
+void ll_print_list(llnode_t * head) {
+
     llnode_t * current = head;
 
     while (current != NULL) {
@@ -12,14 +13,17 @@ void print_list(llnode_t * head) {
     }
 }
 
-int pop(llnode_t ** head) {
+int ll_pop(llnode_t ** head) {
+
     int retval = -1;
     llnode_t * next_node = NULL;
 
+    // If the list is empty
     if (*head == NULL) {
         return -1;
     }
 
+    // Free the head and set the head to be the next node (or NULL)
     next_node = (*head)->next;
     retval = (*head)->val;
     free(*head);
@@ -28,18 +32,18 @@ int pop(llnode_t ** head) {
     return retval;
 }
 
-int remove_by_value(llnode_t ** head, int myval) {
+int ll_remove_by_value(llnode_t ** head, int myval) {
 
     //If the value of the head is myval --- remove the head
-    while ((*head)->val == myval){
-        pop(head);
+    while ((*head != NULL) && (*head)->val == myval){
+        ll_pop(head);
     }
     
     llnode_t *current = *head;
     llnode_t *temp_node = NULL;
     
     // While this is not the last node
-    while (current->next != NULL){
+    while (current != NULL && current->next != NULL){
         // If the next node has value myval
         if (current->next->val == myval){
             
@@ -56,4 +60,32 @@ int remove_by_value(llnode_t ** head, int myval) {
             
     }
 	return 0;
+}
+
+
+int ll_free_list(llnode_t **head){
+
+    // Original Implementation
+    /*
+    // If the list is empty
+    if (*head == NULL) return 0;
+    
+    // Temporary node
+    llnode_t * next_node = NULL;
+
+    // If the head's next node is not empty, i.e. there are more than two nodes
+    while ((*head)->next != NULL){
+        next_node = (*head) -> next;
+        free(*head);
+        (*head) = next_node;
+    }
+
+    // free the last node
+    free(*head);
+    */
+
+    // Implementation using ll_pop
+    while (*head != NULL){
+        ll_pop(head);
+    }
 }
