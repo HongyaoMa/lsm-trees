@@ -4,6 +4,88 @@
 
 int main() {
 
+    // Construct a test list
+    llnode_t * test_list = NULL;
+    ll_push(&test_list, 3);
+    ll_append(&test_list, 2);     
+    ll_append(&test_list, 3);  
+    ll_append(&test_list, 4);  
+
+    // Testing the push function
+    ll_push(&test_list, 6);
+
+    // Testing the append function
+    ll_append(&test_list, 5);
+
+    // Testing the length function 
+    printf("The length of the list is %d\n", ll_length(test_list));
+
+    // print the list before removing all "3"'s
+    printf("List before removing 3\n");
+    ll_print_list(test_list);
+
+    // print the list after removing all 3's
+    printf("List after removing 3\n");
+    ll_remove_by_value(&test_list, 3);
+    ll_print_list(test_list);
+
+
+
+
+    /*********** Tests related to Merge Sort **************/
+
+    // Testing the function move node
+    llnode_t * new_list = NULL;
+    ll_moveNode(&new_list, &test_list);
+    ll_print_list(test_list);
+    ll_print_list(new_list);
+
+
+
+
+
+    /************* Tests for an empty list **************/
+    /*
+    printf("Tests for an empty list:\n");
+
+    llnode_t *empty_list = NULL;
+
+    // Length of an empty list
+    printf("The length of an empty list is %d\n", ll_length(empty_list));
+
+    // Push to an empty list 
+    ll_push(&empty_list, 3);
+    ll_print_list(empty_list);
+    ll_pop(&empty_list);
+
+    // Popping from an empty list
+    printf("Return value from popping an empty list is %d \n", ll_pop(&empty_list));
+
+    // Append to an empty list
+    ll_append(& empty_list, 5);    
+    ll_print_list(empty_list);
+    ll_pop(&empty_list);
+
+    // Printing an empty list
+    ll_print_list(empty_list);
+
+    // free the testing list
+    ll_free_list(&empty_list);    
+    */
+
+
+
+    // Free the memory!
+    ll_free_list(&test_list);
+    ll_free_list(&new_list);
+
+}
+
+
+
+/*****************  OBSOLETED & DEBUG ******************/
+
+    /*
     // Constructing a list
     llnode_t * test_list = malloc(sizeof(llnode_t));
 
@@ -15,24 +97,4 @@ int main() {
     test_list->next->next->next = malloc(sizeof(llnode_t));
     test_list->next->next->next->val = 4;
     test_list->next->next->next->next = NULL;
-
-    // print the list before removing all "3"'s
-    printf("List before removing 3\n");
-    ll_print_list(test_list);
-
-    // print the list after removing all 3's
-    printf("List after removing 3\n");
-    ll_remove_by_value(&test_list, 3);
-
-    // DEBUG
-    // ll_remove_by_value(&test_list, 2);
-    // ll_remove_by_value(&test_list, 4);  
-
-    ll_print_list(test_list);
-
-    // Freeing the spae?
-    // DEBUG
-    //printf("Free the list!\n");
-
-    ll_free_list(&test_list);
-}
+    */

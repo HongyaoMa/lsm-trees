@@ -1,58 +1,113 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "linkedlist.h"
 
-
+/* Printing the list */
 void ll_print_list(llnode_t * head) {
 
     llnode_t * current = head;
+    if (current == NULL){
+        printf("The list to be printed is empty!\n");
+        return;
+    }
 
     while (current != NULL) {
-        printf("%d\n", current->val);
+        printf("%d ", current->val);
         current = current->next;
     }
+    printf("\n");
 }
 
-int ll_pop(llnode_t ** head) {
+/* Traverse the list to compute its length */
+int ll_length(llnode_t * head){
+    llnode_t * current = head;
+    int length = 0;
+
+    while (current != NULL) {
+        length++;
+        current = current->next;
+    }
+    return length;
+}
+
+
+// Push a node to the head of the list
+int ll_push(llnode_t **headRef, int data){
+
+    llnode_t* newNode = malloc(sizeof(llnode_t));
+
+    newNode->val = data;
+    newNode->next = *headRef;
+    *headRef = newNode;
+
+    return 0;
+}
+
+// Pop the head of the list and return its value
+int ll_pop(llnode_t ** headRef) {
 
     int retval = -1;
     llnode_t * next_node = NULL;
 
     // If the list is empty
-    if (*head == NULL) {
+    if (*headRef == NULL) {
         return -1;
     }
 
     // Free the head and set the head to be the next node (or NULL)
-    next_node = (*head)->next;
-    retval = (*head)->val;
-    free(*head);
-    *head = next_node;
+    next_node = (*headRef)->next;
+    retval = (*headRef)->val;
+    free(*headRef);
+    *headRef = next_node;
 
     return retval;
 }
 
-int ll_remove_by_value(llnode_t ** head, int myval) {
+// Append a node at the end of the list
+int ll_append(llnode_t **headRef, int data){
+
+    // generate a new node
+    llnode_t* newNode = malloc(sizeof(llnode_t));
+    newNode ->val = data;
+    newNode -> next = NULL;
+
+    llnode_t* current = *headRef;
+
+    // If the list is empty: set the head to the new node
+    if (current == NULL){
+        *headRef = newNode;
+    }
+    else{
+        // Find the end of the list and append the node
+        while (current->next != NULL){
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+
+    return 0;
+}
+
+
+// Remove all nodes with value myval from the list
+int ll_remove_by_value(llnode_t ** headRef, int myval) {
 
     //If the value of the head is myval --- remove the head
-    while ((*head != NULL) && (*head)->val == myval){
-        ll_pop(head);
+    while ((*headRef != NULL) && (*headRef)->val == myval){
+        ll_pop(headRef);
     }
     
-    llnode_t *current = *head;
+    llnode_t *current = *headRef;
     llnode_t *temp_node = NULL;
     
     // While this is not the last node
     while (current != NULL && current->next != NULL){
+
         // If the next node has value myval
         if (current->next->val == myval){
-            
-            // Keep the next node's pointer
-            temp_node = current->next;
-            
-            // Point the current node to the next of next node
-            current->next = current->next->next;
-            
+            temp_node = current->next;  // Keep the next node's pointer
+            current->next = current->next->next;    // Point the current node to the next of next node
             free(temp_node);
         }
 		// proceed to the next node
@@ -62,10 +117,44 @@ int ll_remove_by_value(llnode_t ** head, int myval) {
 	return 0;
 }
 
+// Free the memory allocate for the whle list
+int ll_free_list(llnode_t **headRef){
 
-int ll_free_list(llnode_t **head){
+    // Implementation using ll_pop
+    while (*headRef != NULL){
+        ll_pop(headRef);
+    }
+}
 
-    // Original Implementation
+
+/************************** Merge Sort **************************/
+
+
+
+/* Move the head node from source to dest */
+// The source list must not be empty
+
+void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef)
+{
+    /* the front source node  */
+    llnode_t* newNode = *sourceRef;
+    assert(newNode != NULL);
+ 
+    /* Advance the source pointer */
+    *sourceRef = newNode->next;
+ 
+    /* Link the old dest off the new node */
+    newNode->next = *destRef;
+ 
+    /* Move dest to point to the new node */
+    *destRef = newNode;
+}
+
+
+
+/*************************  OBSOLETED***************************/
+
+    // Original Implementation of ll_free_list
     /*
     // If the list is empty
     if (*head == NULL) return 0;
@@ -83,9 +172,3 @@ int ll_free_list(llnode_t **head){
     // free the last node
     free(*head);
     */
-
-    // Implementation using ll_pop
-    while (*head != NULL){
-        ll_pop(head);
-    }
-}
