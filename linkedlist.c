@@ -129,8 +129,6 @@ int ll_free_list(llnode_t **headRef){
 
 /************************** Merge Sort **************************/
 
-
-
 /* Move the head node from source to dest */
 // The source list must not be empty
 void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef)
@@ -188,23 +186,24 @@ llnode_t * ll_sortedMerge(llnode_t ** list1Ref, llnode_t ** list2Ref){
 }
 
 /* Split a linked list in two */
-int ll_split(llnode_t *source, llnode_t ** frontRef, llnode_t ** backRef){
+int ll_split(llnode_t **sourceRef, llnode_t ** frontRef, llnode_t ** backRef){
     
-
     // Set the front to point to the resource
-    *frontRef = source;
+    *frontRef = *sourceRef;
 
     // If the source list is empty
-    if ((source == NULL) || (source->next == NULL)){
-        *backRef = NULL;      
+    if (((*sourceRef) == NULL) || ((*sourceRef)->next == NULL)){
+        *backRef = NULL;   
+
+        *sourceRef = NULL;
         return 0;
     }
 
     else{        
 
         // Fast and slow node
-        llnode_t * fast = source->next;
-        llnode_t * slow = source;   
+        llnode_t * fast = (*sourceRef)->next;
+        llnode_t * slow = *sourceRef;   
 
         // int slowCount = 1;
         // int fastCount = 2;

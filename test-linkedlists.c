@@ -37,6 +37,8 @@ int main() {
     ll_moveNode(&new_list, &test_list);
     ll_print_list(test_list);
     ll_print_list(new_list);
+
+    ll_free_list(&test_list);
     ll_free_list(&new_list);
 
 
@@ -49,6 +51,7 @@ int main() {
     llnode_t * sortedList  = ll_sortedMerge(&list1, &list2);
     printf("Result of merging two empty lists:\n");
     ll_print_list(sortedList);  
+    ll_free_list(&sortedList);
 
     // Merge one list and an empty one
     ll_append(&list1, 1);
@@ -59,6 +62,7 @@ int main() {
     printf("Result of merging one non-empty list with an empty one\n");
     sortedList  = ll_sortedMerge(&list1, &list2);
     ll_print_list(sortedList);      
+    ll_free_list(&sortedList);
 
     // Merge two lists that are both non-empty
     ll_append(&list1, 1);
@@ -75,7 +79,7 @@ int main() {
     printf("Merging two non-empty lists:\n");
     sortedList = ll_sortedMerge(&list1, &list2);
     ll_print_list(sortedList);   
-
+    // ll_free_list(&sortedList);
 
     // What happens after merge?
     printf("What happens to the original after merging?\n");
@@ -88,32 +92,34 @@ int main() {
     llnode_t * back;
 
     printf("Splitting a list with an odd number of nodes:\n");
-    ll_split(sortedList, &front, &back);
+    ll_split(&sortedList, &front, &back);
     ll_print_list(front);
     ll_print_list(back);
+
+    printf("What's happening with the original after the split?\n");
+    ll_print_list(sortedList);
+
+    ll_free_list(&front);
+    ll_free_list(&back);
 
     // Splitting an empty list
     printf("Splitting an empty list:\n");  
-    ll_split(NULL, &front, &back);
+    llnode_t * one_node_list = NULL;
+    ll_split(&one_node_list, &front, &back);
     ll_print_list(front);
     ll_print_list(back);
+    ll_free_list(&front);
+    ll_free_list(&back);
 
     // Splitting a list with only one element
     printf("Splitting a lsit with one element:\n");  
-    llnode_t * one_node_list = NULL;
     ll_push(&one_node_list, 2);
-    ll_split(one_node_list, &front, &back);
+    ll_split(&one_node_list, &front, &back);
     ll_print_list(front);
     ll_print_list(back);    
 
-
-    // Free the memory!
-    ll_free_list(&test_list);
-
-    // ll_free_list(&list1);
-    // ll_free_list(&list2);
-    ll_free_list(&sortedList);
-
+    ll_free_list(&front);
+    ll_free_list(&back);
 }
 
 
@@ -133,7 +139,6 @@ int main() {
     test_list->next->next->next->val = 4;
     test_list->next->next->next->next = NULL;
     */
-
 
 
     /************* Tests for an empty list **************/
