@@ -42,7 +42,7 @@ int main() {
     ll_free_list(&new_list);
 
 
-    // Testing the ll_sortedMerge function
+    // ************Testing the ll_sortedMerge function ************
 
     llnode_t * list1 = NULL;
     llnode_t * list2 = NULL;
@@ -86,8 +86,8 @@ int main() {
     ll_print_list(list1);
     ll_print_list(list2);    
 
+    // ************ Testing the front back split function************
 
-    // Testing the front back split function
     llnode_t * front;
     llnode_t * back;
 
@@ -120,6 +120,42 @@ int main() {
 
     ll_free_list(&front);
     ll_free_list(&back);
+
+
+    //**************    Testing the Merge Sort function *********************
+
+    llnode_t * list_to_sort = NULL;
+
+    // Sort an empty list
+    printf("Sorting an empty list\n");
+    ll_mergeSort(&list_to_sort);
+    ll_print_list(list_to_sort);   
+
+    printf("Sorting a list with one element\n");
+    ll_append(&list_to_sort, 5);    
+    ll_mergeSort(&list_to_sort);
+    ll_print_list(list_to_sort);   
+
+
+    ll_append(&list_to_sort, 5);
+    ll_append(&list_to_sort, 2);    
+    ll_append(&list_to_sort, 4); 
+    ll_append(&list_to_sort, 7);    
+
+
+    // Sort a regular list
+    printf("The list before sorting:\n");
+    ll_print_list(list_to_sort);   
+
+    ll_mergeSort(&list_to_sort);
+    printf("The Sorted List:\n");
+
+    ll_print_list(list_to_sort);      
+    ll_free_list(&list_to_sort);
+
+
+
+
 }
 
 

@@ -233,8 +233,22 @@ int ll_split(llnode_t **sourceRef, llnode_t ** frontRef, llnode_t ** backRef){
 
 
 /* The Merge Sort function */
+
 int ll_mergeSort(llnode_t ** headRef){
 
+    llnode_t * head = *headRef;
+    llnode_t * front = NULL;
+    llnode_t * back = NULL;
+
+    if ( (head == NULL) || (head->next == NULL) ){
+        return 0;
+    }
+    else{
+        ll_split(headRef, &front, &back);
+        ll_mergeSort(&front);
+        ll_mergeSort(&back);
+        *headRef = ll_sortedMerge(&front, &back);
+    }
     return 0;
 }
 
