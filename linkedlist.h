@@ -35,5 +35,12 @@ int ll_free_list(llnode_t **headRef);
 void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef);
 
 
+/* Merge two sorted lists that are already sorted in increasing order */
+llnode_t * ll_sortedMerge(llnode_t * list1, llnode_t * list2);
+
+
+
+
+
 
 #endif

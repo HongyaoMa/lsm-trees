@@ -133,7 +133,6 @@ int ll_free_list(llnode_t **headRef){
 
 /* Move the head node from source to dest */
 // The source list must not be empty
-
 void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef)
 {
     /* the front source node  */
@@ -148,6 +147,38 @@ void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef)
  
     /* Move dest to point to the new node */
     *destRef = newNode;
+}
+
+
+/* Merge two sorted lists that are already sorted in increasing order */
+llnode_t * ll_sortedMerge(llnode_t * list1, llnode_t * list2){
+    llnode_t * resultHead = NULL;
+    llnode_t ** lastPtrRef = &resultHead;
+
+    while (1){
+        if (list1 == NULL){
+            *lastPtrRef = list2;
+            break;
+        }   
+        else if (list2 == NULL){
+            *lastPtrRef = list1;
+            break;
+        }
+        if (list1->val <= list2->val) {
+            *lastPtrRef = list1;
+            list1 = list1 -> next;
+            // ll_moveNode(lastPtrRef, &list1);
+        }
+        else{
+            *lastPtrRef = list2;
+            list2 = list2 -> next;
+            // ll_moveNode(lastPtrRef, &list2);
+        }
+
+        lastPtrRef = &((*lastPtrRef)->next); 
+    }
+
+    return(resultHead);
 }
 
 

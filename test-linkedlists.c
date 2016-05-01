@@ -40,9 +40,23 @@ int main() {
     ll_print_list(test_list);
     ll_print_list(new_list);
 
+    // Merging two lists
 
+    llnode_t * list1 = NULL;
+    ll_append(&list1, 1);
+    ll_append(&list1, 3);
+    ll_append(&list1, 5);
+    ll_print_list(list1);    
 
+    llnode_t * list2 = NULL;
+    ll_append(&list2, 2);
+    ll_append(&list2, 4);
+    ll_append(&list2, 6);
+    ll_print_list(list2);  
 
+    llnode_t * sortedList = NULL;
+    sortedList = ll_sortedMerge(list1, list2);
+    ll_print_list(sortedList);      
 
     /************* Tests for an empty list **************/
     /*
@@ -78,6 +92,9 @@ int main() {
     // Free the memory!
     ll_free_list(&test_list);
     ll_free_list(&new_list);
+    //ll_free_list(&list1);
+    //ll_free_list(&list2);
+    //ll_free_list(&sortedList);
 
 }
 
