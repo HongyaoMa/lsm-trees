@@ -151,9 +151,12 @@ void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef)
 
 
 /* Merge two sorted lists that are already sorted in increasing order */
-llnode_t * ll_sortedMerge(llnode_t * list1, llnode_t * list2){
+llnode_t * ll_sortedMerge(llnode_t ** list1Ref, llnode_t ** list2Ref){
     llnode_t * resultHead = NULL;
     llnode_t ** lastPtrRef = &resultHead;
+
+    llnode_t * list1 = *list1Ref;
+    llnode_t * list2 = *list2Ref;
 
     while (1){
         if (list1 == NULL){
@@ -178,9 +181,63 @@ llnode_t * ll_sortedMerge(llnode_t * list1, llnode_t * list2){
         lastPtrRef = &((*lastPtrRef)->next); 
     }
 
+    *list1Ref = NULL;
+    *list2Ref = NULL;
+
     return(resultHead);
 }
 
+/* Split a linked list in two */
+int ll_split(llnode_t *source, llnode_t ** frontRef, llnode_t ** backRef){
+    
+
+    // Set the front to point to the resource
+    *frontRef = source;
+
+    // If the source list is empty
+    if ((source == NULL) || (source->next == NULL)){
+        *backRef = NULL;      
+        return 0;
+    }
+
+    else{        
+
+        // Fast and slow node
+        llnode_t * fast = source->next;
+        llnode_t * slow = source;   
+
+        // int slowCount = 1;
+        // int fastCount = 2;
+
+        while (fast != NULL){
+
+            fast = fast -> next;
+            // fastCount ++;
+
+            // printf("Slow = %d, fast = %d?\n", slowCount, fastCount);
+
+            if (fast != NULL){
+                fast = fast -> next;
+                slow = slow -> next;
+                // fastCount++;
+                // slowCount++;
+            }
+        }
+
+        // Set the back to be the slow node
+        *backRef = slow->next;
+        slow->next = NULL;        
+    }
+
+    return 0;
+}
+
+
+/* The Merge Sort function */
+int ll_mergeSort(llnode_t ** headRef){
+
+    return 0;
+}
 
 
 /*************************  OBSOLETED***************************/

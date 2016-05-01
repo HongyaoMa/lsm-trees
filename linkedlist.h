@@ -36,9 +36,14 @@ void ll_moveNode(llnode_t ** destRef, llnode_t ** sourceRef);
 
 
 /* Merge two sorted lists that are already sorted in increasing order */
-llnode_t * ll_sortedMerge(llnode_t * list1, llnode_t * list2);
+llnode_t * ll_sortedMerge(llnode_t ** list1Ref, llnode_t ** list2Ref);
+
+/* Split a linked list in two */
+int ll_split(llnode_t *source, llnode_t ** frontRef, llnode_t ** backRef);
 
 
+/* The Merge Sort function */
+int ll_mergeSort(llnode_t ** headRef);
 
 
 
