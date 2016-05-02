@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "linkedlist.h"
 
 int main() {
 
@@ -10,7 +9,6 @@ int main() {
 	// printf("The maximum number rand() generates is %d\n", RANDOM_MAX);
 
 	// Generating a random array of size size
-
 	int size = 10;
 	int i;
 	int *elements = malloc(sizeof(int)*size);
@@ -43,11 +41,6 @@ int main() {
 
   	// Free the allocated memory
   	free(elements);
-
-
-
-
-
 
 	return 0;
 }
