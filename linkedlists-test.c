@@ -153,9 +153,6 @@ int main() {
     ll_print_list(list_to_sort);      
     ll_free_list(&list_to_sort);
 
-
-
-
 }
 
 
