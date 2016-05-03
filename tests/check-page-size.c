@@ -1,4 +1,6 @@
 // Checking the page size of the system --- Unix based
+// https://en.wikipedia.org/wiki/Page_(computer_memory)
+
 // The LSM Tree Project, CS265
 // Hongyao Ma
 // 04/29/2016
