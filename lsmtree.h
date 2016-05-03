@@ -8,6 +8,7 @@ typedef struct tag_lsmNode {
 
 typedef struct tag_lsmTree {
     int* c0;
+    int c0_size;
 } lsmTree;
 
 
