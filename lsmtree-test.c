@@ -9,12 +9,20 @@
 
 int main() {
 
+	// maximum c0 size
+	int max_c0_size = 1000000;
+
+	
+
 	// Initialization of the tree
-	lsmTree * testTree = malloc(sizeof(lsmTree));
-	lsm_init(testTree);
+	lsmTree * testTree;
+	lsm_init(&testTree, max_c0_size);
+
+	printf("Size of the C0 Tree is %d\n", get_c0_size(testTree));
 
 	// Free the tree
-	lsm_free(testTree);
+	lsm_free(&testTree);
+
 
     return 0;
 }
