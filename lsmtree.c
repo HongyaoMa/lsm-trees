@@ -79,8 +79,8 @@ int lsm_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks_per
     (* treeRef) -> empty_ram_level = 0;
     (* treeRef) -> empty_ram_block = 0;
 
+    // Indicator of the existence of each tree --- initialized to all zeros
     (* treeRef) -> flag_ramTrees = malloc(sizeof(bool) * input_num_blocks_per_level * input_max_level_in_ram);
-
     for (i=0; i < input_num_blocks_per_level * input_max_level_in_ram; i++){
         (* treeRef) -> flag_ramTrees[i] = 0;
     }  
@@ -353,6 +353,9 @@ int treeUpdate(lsmTree * tree){
     }
     return 0;
 }
+
+
+
 
 
 
