@@ -31,16 +31,23 @@ valueType get_with_key(lsmTree * tree, keyType key_to_get);
 valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update);
 
 
-
 /******************** I/O and Meta Data Related ********************/
 
 /* Get the size of the C0 Tree */
 int get_c0_size(lsmTree * tree);
 
 /* Printing the C0 tree */
-int print_c0_tree(lsmTree * tree);
+int print_tree_param(lsmTree *tree);
 
 /* Print the current status of the tree */
 int print_meta_data(lsmTree *tree);
+
+/* Printing the C0 tree */
+int print_c0_tree(lsmTree * tree);
+
+/* Print the full tree in RAM*/
+int print_RAM_tree(lsmTree * tree);
+
+
 
 #endif

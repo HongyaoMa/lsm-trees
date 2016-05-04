@@ -18,15 +18,18 @@ int main() {
 	lsmTree * testTree;
 	lsm_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
 
+	// The print_tree_param function
+	// print_tree_param(testTree);
 
 	/************************* Basic Tree Manipulations ************************/
 
 	// Filling up the c0 tree, get size, and print the c0 tree
 	int i;
-	for (i=0; i < 4; i++){
+	for (i=0; i < 18; i++){
 		put_with_key(testTree, rand(), random());
 	}
 
+	/* 
 	// Testing get_c0_size
 	printf("Size of the C0 Tree is %d\n", get_c0_size(testTree));
 
@@ -45,12 +48,13 @@ int main() {
 	printf("The old value of key  is %ld\n", old_value);	
 
 	// print_c0_tree(testTree);
-	
+	*/
+
 	print_meta_data(testTree);
+	print_RAM_tree(testTree);
 
 	// Free the tree
 	lsm_free(&testTree);
-
 
     return 0;
 }

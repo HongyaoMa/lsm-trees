@@ -184,38 +184,33 @@ int get_c0_size(lsmTree * tree)
 }
 
 /* Print the current status of the tree */
+int print_tree_param(lsmTree *tree){
+
+    printf("\nPrinting the Parameters of the Tree!\n");
+
+    printf("\nThe maximum size of the C0 level is %d \n", tree->max_c0_size);
+
+    printf("\nThe number of blocks per level is %d \n", tree -> num_blocks_per_level);    
+
+    printf("\nThe number of levels in RAM is %d \n", tree -> max_level_in_ram);
+
+    return 0;
+}
+
+/* Print the current status of the tree */
 int print_meta_data(lsmTree *tree){
-
-/*    // Parameters 
-    int max_c0_size;
-    int num_blocks_per_level;
-    int max_level_in_ram;
-
-    // The c0 tree
-    lsmNode* c0Tree;
-    
-    // Pointers to the trees in memory
-    lsmNode ** ramTrees;
-
-    // Meta data
-    int c0_size;            // current size of the c0 tree
-    bool * flag_ramTrees;   // the existence of each in RAM tree
-
-    int empty_ram_level;
-    int empty_ram_block;
-    */
 
     printf("\nPrinting the Meta Data of the Tree!\n");
 
     printf("\nThe current size of the C0 tree is %d \n", tree->c0_size);
 
-    printf("\nFlas of the in-RAM trees:\n");
+    printf("\nFlags of the existence of the in-RAM trees:\n");
 
     int i_level, i_block;
 
     for (i_level = 0; i_level < tree -> max_level_in_ram; i_level++)
         for (i_block = 0; i_block < tree -> num_blocks_per_level; i_block ++)
-            printf("Existence of the level %d, block %d tree: %d \n", i_level, i_block, tree-> flag_ramTrees[i_level * tree -> num_blocks_per_level + i_block]);
+            printf("Existence of the level %d, block %d tree: %d \n", i_level+1, i_block+1, tree-> flag_ramTrees[i_level * tree -> num_blocks_per_level + i_block]);
 
     printf("\nThe first empty level is %d \n", tree-> empty_ram_level);
     printf("\nThe first empty block in the empty level is %d \n", tree-> empty_ram_block);
@@ -243,6 +238,29 @@ int print_c0_tree(lsmTree * tree){
         printf("%d, \t %ld\n",  tree -> c0Tree[i].key,  tree -> c0Tree[i].val);
     }
 
+    return 0;
+}
+
+
+/* Print the full tree in RAM*/
+int print_RAM_tree(lsmTree * tree){
+    print_c0_tree(tree);
+
+    int i_level, i_block;
+
+    for(i_level = 0; i_level < tree -> max_level_in_ram; i_level++){
+        for (i_block = 0; i_block < tree-> num_blocks_per_level; i_block++){
+            if (tree-> flag_ramTrees[i_level * tree -> num_blocks_per_level + i_block]){
+                printf("Printing the level %d block %d tree!\n", i_level+1, i_block+1);
+                int i;
+                for (i=0; i< tree->max_c0_size * pow(tree -> num_blocks_per_level, i_level); i++)
+                    printf("%d, \t %ld\n",  tree -> ramTrees[i_level*tree -> num_blocks_per_level + i_block][i].key,  tree -> ramTrees[i_level*tree -> num_blocks_per_level + i_block][i].val);
+            }
+            else{
+                printf("The level %d block %d tree is non-existent!\n", i_level+1, i_block+1);
+            }
+        }
+    }
     return 0;
 }
 
