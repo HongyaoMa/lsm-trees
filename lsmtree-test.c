@@ -25,7 +25,7 @@ int main() {
 
 	// Filling up the c0 tree, get size, and print the c0 tree
 	int i;
-	for (i=0; i < 18; i++){
+	for (i=0; i < 32; i++){
 		put_with_key(testTree, rand(), random());
 	}
 

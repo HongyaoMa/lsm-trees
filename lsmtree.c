@@ -30,8 +30,8 @@ typedef struct tag_lsmTree{
 
     // Meta data
     int c0_size;            // current size of the c0 tree
-    bool * flag_ramTrees;   // the existence of each in RAM tree
 
+    bool * flag_ramTrees;   // the existence of each in RAM tree
     int empty_ram_level;
     int empty_ram_block;
 
@@ -42,7 +42,6 @@ typedef struct tag_lsmTree{
 
 /* Update the tree everytime c0 is full*/
 int treeUpdate(lsmTree * tree);
-
 
 /* In-place implementation of Quick Sort for node arrays*/
 int quickSort(lsmNode * inputArray, int array_size);
@@ -116,7 +115,7 @@ int lsm_free(lsmTree ** treeRef){
 }
 
 
-/********************       Basic Tree Operations ********************/
+/********************     Basic Tree Operations ********************/
 
 /* Puting a key value pair into the tree */
 int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
@@ -244,14 +243,22 @@ int print_c0_tree(lsmTree * tree){
 
 /* Print the full tree in RAM*/
 int print_RAM_tree(lsmTree * tree){
+
+    // If the tree is too big to be printed
+    if (tree->max_c0_size > 20){
+        printf("The size of the tree is too big to be printed!\n");
+        return -1;
+    }
+
+    // Print the c0 tree
     print_c0_tree(tree);
 
+    // Print each block in each level of the tree
     int i_level, i_block;
-
     for(i_level = 0; i_level < tree -> max_level_in_ram; i_level++){
         for (i_block = 0; i_block < tree-> num_blocks_per_level; i_block++){
             if (tree-> flag_ramTrees[i_level * tree -> num_blocks_per_level + i_block]){
-                printf("Printing the level %d block %d tree!\n", i_level+1, i_block+1);
+                printf("\nPrinting the level %d block %d tree!\n", i_level+1, i_block+1);
                 int i;
                 for (i=0; i< tree->max_c0_size * pow(tree -> num_blocks_per_level, i_level); i++)
                     printf("%d, \t %ld\n",  tree -> ramTrees[i_level*tree -> num_blocks_per_level + i_block][i].key,  tree -> ramTrees[i_level*tree -> num_blocks_per_level + i_block][i].val);
@@ -316,8 +323,11 @@ int treeUpdate(lsmTree * tree){
         tree -> ramTrees[0] = tree -> c0Tree;
         tree -> flag_ramTrees[0] = true;
 
+        // Re-initialize the c0 tree
         tree -> c0Tree = malloc(sizeof(lsmNode) * tree -> max_c0_size);
         tree -> c0_size = 0;
+
+        // Update the current empty level and empty block
 
         tree -> empty_ram_block = num_block;
         tree -> empty_ram_level = num_level;    
@@ -338,7 +348,8 @@ int treeUpdate(lsmTree * tree){
                 tree -> empty_ram_level = i_level;
                 break;
             }
-        }    
+        }
+
     }
     return 0;
 }
@@ -460,14 +471,16 @@ lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, in
     return destArray;
 }
 
+
+
+
+/*********************************************************************/
+/************************   Utility Functions ************************/
+/*********************************************************************/
+
+
+
+
 /*********************************************************************/
 /*****************************  Obsoleted  ***************************/
 /*********************************************************************/
-    /*
-    // Traverse the meta data to see which block in which level is available
-
-
-    // DEBUG
-    // printf("Level available = %d \n", level_available);
-    // printf("Block available = %d \n", block_available);
-    */
