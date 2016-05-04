@@ -47,9 +47,6 @@ int main() {
 	print_c0_tree(testTree);
 
 
-
-
-
 	// Free the tree
 	lsm_free(&testTree);
 
