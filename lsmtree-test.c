@@ -6,8 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lsmtree.h"
+// #include "lsmsubtree.h"
 
 int main() {
+
+	/*
+	#ifdef _LSMSUBTREE_H
+		printf("SUBTREE DEFINED!\n");
+	#endif
+	*/
 
 	// maximum c0 size
 	int max_c0_size = 5;
@@ -16,7 +23,7 @@ int main() {
 	
 	// Initialization of the tree
 	lsmTree * testTree;
-	lsm_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
+	lsmTree_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
 
 	// The print_tree_param function
 	print_tree_param(testTree);
@@ -54,7 +61,7 @@ int main() {
 	print_RAM_tree(testTree);
 
 	// Free the tree
-	lsm_free(&testTree);
+	lsmTree_free(&testTree);
 
     return 0;
 }

@@ -4,19 +4,19 @@
 typedef int keyType;
 typedef long valueType;
 
-typedef struct tag_lsmNode lsmNode;
-typedef struct tag_lsmTree lsmTree;
-
 typedef int bool;
 #define true 1
 #define false 0
 
+// typedef struct tag_lsmNode lsmNode;
+typedef struct tag_lsmTree lsmTree;
+
 
 /* Initializer */
-int lsm_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks_per_level, int input_num_level_in_ram);
+int lsmTree_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks_per_level, int input_num_level_in_ram);
 
 /* Destructor */
-int lsm_free(lsmTree ** treeRef);
+int lsmTree_free(lsmTree ** treeRef);
 
 
 /********************	Basic Tree Operations ********************/

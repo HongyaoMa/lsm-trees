@@ -7,9 +7,19 @@
 #include <stdlib.h>
 #include "lsmsubtree.h"
 
+
 int main() {
 
 	int i;
+
+	int maxSize = 5;
+	bool allocMemory = true;
+	bool isSorted = false;
+
+	lsmSubTree * subtree;
+	lsmSubTree_init(&subtree, maxSize, isSorted, allocMemory);
+	
+	lsmSubTree_free(&subtree);
 
 	/*
 
@@ -40,6 +50,7 @@ int main() {
 
 	*/
 
+/*
 	// Testing the sortedMerge function
 
 	lsmNode * array1 = malloc(sizeof(lsmNode)*5);
@@ -99,6 +110,7 @@ int main() {
 	}
 
 	free(node_array);
+*/
 
     return 0;
 }

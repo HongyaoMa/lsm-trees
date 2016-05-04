@@ -6,6 +6,49 @@
 // Maximum levels for the quick sort function
 #define QS_MAX_LEVELS 1000
 
+
+// The lsmSubTree
+typedef struct tag_lsmSubTree{
+    lsmNode * subTreeHead;
+    int current_size;
+    int maxSize;
+    bool isSorted;
+} lsmSubTree;
+
+/* Initializer */
+int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, int isSorted, bool allocMemory){
+    
+    // Allocation for the subtree itself
+    (*subTreeRef) = malloc(sizeof(lsmSubTree));
+
+    // Meta Data
+    (*subTreeRef) -> current_size = 0;    
+    (*subTreeRef) -> maxSize = input_maxSize;    
+    (*subTreeRef) -> isSorted = false;
+
+    if (allocMemory) {
+        (*subTreeRef) -> subTreeHead = malloc(sizeof(lsmNode) * input_maxSize); //TODO: catch memory exception
+    }
+    else{
+        (*subTreeRef) -> subTreeHead = NULL;
+    }
+}
+
+
+/* Destructor */
+int lsmSubTree_free(lsmSubTree ** subTreeRef){
+
+    // Free the memory for the array saved in the subtree
+    if ( (*subTreeRef) -> subTreeHead != NULL){
+        free((*subTreeRef) -> subTreeHead);
+    }
+
+    // Free the subtree itself
+    free(* subTreeRef);
+    return 0;
+}
+
+
 /* Merge two sorted arrays */
 lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2)
 {
@@ -41,43 +84,6 @@ lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, in
     *source2Ref = NULL;
 
     return destArray;
-}
-
-
-/* Recursive implementation of MergeSort for node arrays*/
-// Reference: https://gist.github.com/mycodeschool/9678029
-
-int mergeSort_rec(lsmNode ** arrayRef, int array_size){
-
-
-    // If the size of the array is smaller than 2: no need to do anyting
-    if (array_size < 2)
-        return;
-
-    // The mid-point
-    int mid = array_size / 2; 
-
-    lsmNode * leftArray = malloc(sizeof(lsmNode) * mid);
-    lsmNode * rightArray = malloc(sizeof(lsmNode) * (array_size- mid));
-
-    int i;
-    lsmNode * inputArray = *arrayRef;
-
-    for (i = 0; i < mid; i++) {
-        leftArray[i] = inputArray[i];
-    }
-
-    for (i = mid; i < array_size; i++) {
-        rightArray[i-mid] = inputArray[i];
-    }
-
-    mergeSort_rec(&leftArray, mid);
-    mergeSort_rec(&rightArray, array_size - mid);
-
-    // Free the original array since space will be re-allocated
-    free(*arrayRef);
-
-    *arrayRef = sortedMerge(&leftArray, mid, &rightArray, array_size - mid);
 }
 
 /* In-place implementation of Quick Sort for node arrays*/
