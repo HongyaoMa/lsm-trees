@@ -217,8 +217,8 @@ int print_meta_data(lsmTree *tree){
         for (i_block = 0; i_block < tree -> num_blocks_per_level; i_block ++)
             printf("Existence of the level %d, block %d tree: %d \n", i_level, i_block, tree-> flag_ramTrees[i_level * tree -> num_blocks_per_level + i_block]);
 
-    printf("\n The first empty level is %d \n", tree-> empty_ram_level);
-    printf("\n The first empty block in the empty level is %d \n", tree-> empty_ram_block);
+    printf("\nThe first empty level is %d \n", tree-> empty_ram_level);
+    printf("\nThe first empty block in the empty level is %d \n", tree-> empty_ram_block);
 
     return 0;
 }
@@ -296,6 +296,7 @@ int treeUpdate(lsmTree * tree){
 
         // Put the c0 tree in the first empty block
         tree -> ramTrees[0] = tree -> c0Tree;
+        tree -> flag_ramTrees[0] = true;
 
         tree -> c0Tree = malloc(sizeof(lsmNode) * tree -> max_c0_size);
         tree -> c0_size = 0;
