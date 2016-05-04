@@ -8,7 +8,6 @@
 // Maximum levels for the quick sort function
 #define QS_MAX_LEVELS 1000
 
-
 typedef struct tag_lsmNode{
     keyType key;
     valueType val;
@@ -23,7 +22,7 @@ typedef struct tag_lsmTree{
     int max_level_in_ram;
 
     // The c0 tree
-    lsmNode* c0Tree;
+    lsmNode * c0Tree;
   	
     // Pointers to the trees in memory
     lsmNode ** ramTrees;
@@ -41,7 +40,11 @@ typedef struct tag_lsmTree{
 /************************   Utility Functions ************************/
 
 /* Update the tree everytime c0 is full*/
+
 int treeUpdate(lsmTree * tree);
+
+/* Update the meta data on the empty levels and blocks */
+int update_empty_level_block(lsmTree * tree);
 
 /* In-place implementation of Quick Sort for node arrays*/
 int quickSort(lsmNode * inputArray, int array_size);
@@ -187,11 +190,11 @@ int print_tree_param(lsmTree *tree){
 
     printf("\nPrinting the Parameters of the Tree!\n");
 
-    printf("\nThe maximum size of the C0 level is %d \n", tree->max_c0_size);
+    printf("The maximum size of the C0 level is %d \n", tree->max_c0_size);
 
-    printf("\nThe number of blocks per level is %d \n", tree -> num_blocks_per_level);    
+    printf("The number of blocks per level is %d \n", tree -> num_blocks_per_level);    
 
-    printf("\nThe number of levels in RAM is %d \n", tree -> max_level_in_ram);
+    printf("The number of levels in RAM is %d \n", tree -> max_level_in_ram);
 
     return 0;
 }
@@ -201,9 +204,9 @@ int print_meta_data(lsmTree *tree){
 
     printf("\nPrinting the Meta Data of the Tree!\n");
 
-    printf("\nThe current size of the C0 tree is %d \n", tree->c0_size);
+    printf("The current size of the C0 tree is %d \n", tree->c0_size);
 
-    printf("\nFlags of the existence of the in-RAM trees:\n");
+    printf("Flags of the existence of the in-RAM trees:\n");
 
     int i_level, i_block;
 
@@ -211,8 +214,14 @@ int print_meta_data(lsmTree *tree){
         for (i_block = 0; i_block < tree -> num_blocks_per_level; i_block ++)
             printf("Existence of the level %d, block %d tree: %d \n", i_level+1, i_block+1, tree-> flag_ramTrees[i_level * tree -> num_blocks_per_level + i_block]);
 
-    printf("\nThe first empty level is %d \n", tree-> empty_ram_level);
-    printf("\nThe first empty block in the empty level is %d \n", tree-> empty_ram_block);
+    if (tree-> empty_ram_level == tree -> max_level_in_ram){
+        printf("All blocks in all levels are full!\n");
+    }
+    else{
+        printf("\nThe first empty level is %d \n", tree-> empty_ram_level);
+        printf("\nThe first empty block in the empty level is %d \n", tree-> empty_ram_block); 
+    }
+
 
     return 0;
 }
@@ -243,6 +252,8 @@ int print_c0_tree(lsmTree * tree){
 
 /* Print the full tree in RAM*/
 int print_RAM_tree(lsmTree * tree){
+
+    printf("\nPrinting the Full Tree in RAM\n");
 
     // If the tree is too big to be printed
     if (tree->max_c0_size > 20){
@@ -328,33 +339,39 @@ int treeUpdate(lsmTree * tree){
         tree -> c0_size = 0;
 
         // Update the current empty level and empty block
-
-        tree -> empty_ram_block = num_block;
-        tree -> empty_ram_level = num_level;    
-
-        for (i_level = 0; i_level < num_level; i_level++){
-            
-            int this_level_available = 0;
-            
-            for (i_block = 0; i_block < num_block; i_block++){
-                if (tree -> flag_ramTrees[i_level * num_block + i_block] == false){
-                    this_level_available = 1;
-                    tree -> empty_ram_block = i_block;
-                    break;
-                }
-            }
-
-            if (this_level_available){
-                tree -> empty_ram_level = i_level;
-                break;
-            }
-        }
+        update_empty_level_block(tree);
 
     }
     return 0;
 }
 
 
+int update_empty_level_block(lsmTree * tree){
+
+    int i_level, i_block;
+    for (i_level = 0; i_level < tree -> max_level_in_ram; i_level++){
+            
+        int this_level_available = 0;
+            
+        for (i_block = 0; i_block < tree->num_blocks_per_level; i_block++){
+            if (tree -> flag_ramTrees[i_level * tree->num_blocks_per_level + i_block] == false){
+                this_level_available = 1;
+                tree -> empty_ram_block = i_block;
+                break;
+            }
+        }
+
+        if (this_level_available){
+            tree -> empty_ram_level = i_level;
+            return 0;
+        }
+    }
+
+    // No empty block in any level:
+    tree -> empty_ram_level = tree -> max_level_in_ram;
+    tree -> empty_ram_block = tree -> max_level_in_ram;
+    return 0;
+}
 
 
 

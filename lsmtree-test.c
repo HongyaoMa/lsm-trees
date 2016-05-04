@@ -19,14 +19,14 @@ int main() {
 	lsm_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
 
 	// The print_tree_param function
-	// print_tree_param(testTree);
+	print_tree_param(testTree);
 
 	/************************* Basic Tree Manipulations ************************/
 
 	// Filling up the c0 tree, get size, and print the c0 tree
 	int i;
-	for (i=0; i < 32; i++){
-		put_with_key(testTree, rand(), random());
+	for (i=0; i < 30; i++){
+		put_with_key(testTree, rand()%100, random());
 	}
 
 	/* 
