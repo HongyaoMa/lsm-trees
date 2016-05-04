@@ -1,5 +1,5 @@
-#ifndef _LSMNODE_H
-#define _LSMNODE_H
+#ifndef _LSMSUBTREE_H
+#define _LSMSUBTREE_H
 
 typedef int keyType;
 typedef long valueType;

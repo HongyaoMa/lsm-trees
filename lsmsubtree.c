@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "lsmnode.h"
+#include "lsmsubtree.h"
 
 // Maximum levels for the quick sort function
 #define QS_MAX_LEVELS 1000
@@ -153,22 +153,6 @@ int quickSort(lsmNode * inputArray, int array_size){
             i--;
         }
     }
-
-    return 0;
-}
-
-
-
-
-
-
-/************************** Obsoleted **********************************/
-
-/* In-place implementation of MergeSort for node arrays*/
-// http://stackoverflow.com/questions/2571049/how-to-sort-in-place-using-the-merge-sort-algorithm
-// https://github.com/liuxinyu95/AlgoXY/blob/algoxy/sorting/merge-sort/src/mergesort.c
-
-int mergeSort(lsmNode ** arrayRef, int array_size){
 
     return 0;
 }
