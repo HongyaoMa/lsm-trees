@@ -27,9 +27,22 @@ int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, int isSorted, b
 int lsmSubTree_free(lsmSubTree ** subTreeRef);
 
 
+/************* Basic Subtree Operations **************/
+
+/* Put a key and value pair into the tree */
+int subTree_put(lsmTree * tree, keyType key_to_put, valueType val_to_put);
 
 
+/* Put a key and value pair into the tree */
+int subTree_get(lsmTree * tree, keyType key_to_put, valueType val_to_put);
 
+
+/* Put a key and value pair into the tree */
+int subTree_update(lsmTree * tree, keyType key_to_put, valueType val_to_put);
+
+
+/* Put a key and value pair into the tree */
+int subTree_delete(lsmTree * tree, keyType key_to_put, valueType val_to_put);
 
 
 
