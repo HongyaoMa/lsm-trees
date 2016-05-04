@@ -17,14 +17,14 @@ int lsm_free(lsmTree ** tree);
 
 /********************	Basic Tree Operations ********************/
 
-// TODO
-valueType get_with_key(lsmTree * tree, keyType key_to_get);
-
 /* Puting a key value pair into the tree */
 int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put);
 
-// TODO
-int update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update);
+/* Get the value of a data entry with key_to_get */
+valueType get_with_key(lsmTree * tree, keyType key_to_get);
+
+/* Update the value of a data entry with key_to_update */
+valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update);
 
 
 

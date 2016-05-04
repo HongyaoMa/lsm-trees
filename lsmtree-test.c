@@ -18,9 +18,12 @@ int main() {
 	lsmTree * testTree;
 	lsm_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
 
+
+	/************************* Basic Tree Manipulations ************************/
+
 	// Filling up the c0 tree, get size, and print the c0 tree
 	int i;
-	for (i=0; i < max_c0_size; i++){
+	for (i=0; i < 4; i++){
 		put_with_key(testTree, rand(), random());
 	}
 
@@ -30,8 +33,21 @@ int main() {
 	// Testing print_c0_tree
 	print_c0_tree(testTree);
 
+	// Testing get_with_key
+	printf("The value corresponding to key 846930886 is %ld\n", get_with_key(testTree, 846930886));
+	printf("The value corresponding to key 5 is %ld\n", get_with_key(testTree, 5));
 
-	/*************** Testing of meta data related functions **************/
+	// Testing update with key
+	valueType old_value = update_with_key(testTree, 846930886, 100);
+	printf("The old value of key 846930886 is %ld\n", old_value);
+
+	old_value = update_with_key(testTree, 5, 500);
+	printf("The old value of key  is %ld\n", old_value);	
+
+	print_c0_tree(testTree);
+
+
+
 
 
 	// Free the tree

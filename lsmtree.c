@@ -62,12 +62,51 @@ int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
     tree -> c0[tree->c0_size].val = val_to_put;
     tree -> c0_size++;
 
+    // TODO: update the tree when c0 is full
+
     return 0;
 }
 
+/* Get the value of a data entry with key_to_get */
+/* Returns -1 if the key is not found or is already deleted */
+
+valueType get_with_key(lsmTree * tree, keyType key_to_get){
+
+    int i;
+
+    // Look for the key in the c0 tree
+    for (i=0; i < tree-> c0_size; i++){
+        if (tree -> c0[i].key == key_to_get){
+            return tree -> c0[i].val;
+        }
+    }
+
+    // If not found: return -1
+    return -1;
+}
 
 
+/* Update the value of a data entry with key_to_update */
+/* Return original value if the key is found */
+/* Returns -1 if the key is not found and a new key is inserted */
+valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update){
 
+    int i;
+
+    // Look for the key in the c0 tree
+    for (i=0; i < tree-> c0_size; i++){
+        if (tree -> c0[i].key == key_to_update){
+            valueType temp_value = tree -> c0[i].val;
+            tree -> c0[i].val = val_to_update;
+            return temp_value;
+        }
+    }
+
+    // If the key is not found: insert it to the tree
+    put_with_key(tree, key_to_update, val_to_update);
+    return -1;
+
+}
 
 
 /********************   Meta Data Related  & IO ********************/
