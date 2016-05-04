@@ -24,6 +24,7 @@ lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, in
             destArray[ind_dest++] = source2[ind2++];       
         }
     }
+
     while (ind1 < size1){
         destArray[ind_dest++] = source1[ind1++];               
     }
@@ -75,4 +76,13 @@ int mergeSort_rec(lsmNode ** arrayRef, int array_size){
     free(*arrayRef);
 
     *arrayRef = sortedMerge(&leftArray, mid, &rightArray, array_size - mid);
+}
+
+/* In-place implementation of MergeSort for node arrays*/
+// http://stackoverflow.com/questions/2571049/how-to-sort-in-place-using-the-merge-sort-algorithm
+// https://github.com/liuxinyu95/AlgoXY/blob/algoxy/sorting/merge-sort/src/mergesort.c
+
+int mergeSort(lsmNode ** arrayRef, int array_size){
+
+    return 0;
 }

@@ -90,14 +90,15 @@ int main() {
 		printf("The value of the is %ld\n", node_array[i].val);		
 	}
 
-	mergeSort_rec(&node_array, 10);
+	// mergeSort_rec(&node_array, 10);
+	mergeSort(&node_array, 10);
 
 	printf("\n The soretd array is: \n");
 	for (i = 0; i<10; i++){
 		printf("The key of the lsmNode is %d\n", node_array[i].key);
 		printf("The value of the is %ld\n", node_array[i].val);		
 	}
-	
+
 	free(node_array);
 
     return 0;
