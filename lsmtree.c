@@ -12,12 +12,18 @@ typedef struct tag_lsmNode{
 
 typedef struct tag_lsmTree{
     
-    lsmNode* c0;
-  	
+    // Parameters 
     int max_c0_size;
     int num_blocks_per_level;
     int max_level_in_ram;
 
+    // The c0 tree
+    lsmNode* c0Tree;
+  	
+    // Pointers to the trees in memory
+    lsmNode ** ramTrees;
+
+    // Meta data
     int c0_size;
 
 } lsmTree;
@@ -35,7 +41,14 @@ int lsm_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks_per
     (* treeRef) -> max_c0_size = input_max_c0_size;
 
     // Allocating memory to the c0 tree
-    (* treeRef) -> c0 = malloc(sizeof(lsmNode) * (* treeRef) -> max_c0_size);
+    (* treeRef) -> c0Tree = malloc(sizeof(lsmNode) * input_max_c0_size);
+
+    // Allocating memory to the pointers to the in RAM trees, and set them all to NULL
+    (* treeRef) -> ramTrees = malloc(sizeof(lsmNode *) * input_num_blocks_per_level * input_max_level_in_ram);
+    int i;
+    for (i=0; i < input_num_blocks_per_level * input_max_level_in_ram; i++){
+        (* treeRef) -> ramTrees[i] = NULL;
+    }  
 
     // Meta Data
     (* treeRef) -> c0_size = 0;
@@ -44,9 +57,22 @@ int lsm_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks_per
 }
 
 /* Destructor */
-int lsm_free(lsmTree ** tree){
-    free((*tree) -> c0);
-    free(*tree);
+int lsm_free(lsmTree ** treeRef){
+
+    // Free the c0 tree
+    free((*treeRef) -> c0Tree);
+
+    // Free the in RAM trees
+    int i;
+    for (i=0; i < (*treeRef) -> num_blocks_per_level *  (*treeRef) -> max_level_in_ram; i++){
+        if ((* treeRef) -> ramTrees[i] != NULL){
+            free((* treeRef) -> ramTrees[i]);
+        }
+    } 
+
+    // Free the pointer to the in RAM trees
+    free((*treeRef) -> ramTrees);
+    free(*treeRef);
 
     return 0;
 }
@@ -58,8 +84,8 @@ int lsm_free(lsmTree ** tree){
 /* Puting a key value pair into the tree */
 int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
 
-    tree -> c0[tree->c0_size].key = key_to_put;
-    tree -> c0[tree->c0_size].val = val_to_put;
+    tree -> c0Tree[tree->c0_size].key = key_to_put;
+    tree -> c0Tree[tree->c0_size].val = val_to_put;
     tree -> c0_size++;
 
     // TODO: update the tree when c0 is full
@@ -76,8 +102,8 @@ valueType get_with_key(lsmTree * tree, keyType key_to_get){
 
     // Look for the key in the c0 tree
     for (i=0; i < tree-> c0_size; i++){
-        if (tree -> c0[i].key == key_to_get){
-            return tree -> c0[i].val;
+        if (tree -> c0Tree[i].key == key_to_get){
+            return tree -> c0Tree[i].val;
         }
     }
 
@@ -95,9 +121,9 @@ valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_t
 
     // Look for the key in the c0 tree
     for (i=0; i < tree-> c0_size; i++){
-        if (tree -> c0[i].key == key_to_update){
-            valueType temp_value = tree -> c0[i].val;
-            tree -> c0[i].val = val_to_update;
+        if (tree -> c0Tree[i].key == key_to_update){
+            valueType temp_value = tree -> c0Tree[i].val;
+            tree -> c0Tree[i].val = val_to_update;
             return temp_value;
         }
     }
@@ -129,7 +155,7 @@ int print_c0_tree(lsmTree * tree){
 
     printf("Printing the c0 tree!\n");
     for (i=0; i<tree -> c0_size; i++){
-        printf("%d, \t %ld\n",  tree -> c0[i].key,  tree -> c0[i].val);
+        printf("%d, \t %ld\n",  tree -> c0Tree[i].key,  tree -> c0Tree[i].val);
     }
 
     return 0;

@@ -84,22 +84,24 @@ int mergeSort_rec(lsmNode ** arrayRef, int array_size){
 // http://alienryderflex.com/quicksort/
 // https://en.wikipedia.org/wiki/Quicksort#C
 
-int quickSort(lsmNode ** arrayRef, int array_size){
+int quickSort(lsmNode * inputArray, int array_size){
 
-    printf("Here?\n");
-    int i = 0, L, R;
-    int beg[QS_MAX_LEVELS], end[QS_MAX_LEVELS];
 
-    beg[0] = 0;
-    end[0] = array_size;
-
+    // The pivot node
     keyType piv;
     valueType piv_val;
 
-    lsmNode * inputArray = *arrayRef;
+    // Counters and ranges
+    int i = 0, L, R;
+    int beg[QS_MAX_LEVELS], end[QS_MAX_LEVELS];
+
+    // Start wiht the full array
+    beg[0] = 0;
+    end[0] = array_size;
+
 
     while(i >= 0){
-        
+
         L = beg[i];
         R = end[i] - 1;
 
@@ -107,35 +109,46 @@ int quickSort(lsmNode ** arrayRef, int array_size){
             piv = inputArray[L].key;
             piv_val = inputArray[L].val;
 
-            // TODO: what is this doing?
+            // TODO: If the maximum # of levels is reached: the algorithm fails!
             if (i == QS_MAX_LEVELS - 1){
                 return -1;
             }
 
+            // If the current array has more than two elements
             while(L < R){
-                while (inputArray[R].key >= piv && L < R) {
+
+                // Find the first entry from the right end that's smaller than the piv key
+                while (inputArray[R].key >= piv && R > L) {
                     R--;
                 }
 
+                // If there is still more than two elements, i.e. there exists an entrt on the right that's smaller than the piv key
+                // move the one smaller than piv to the left end --- the piv value has been recorded so don't worry
                 if (L < R) {
                     inputArray[L++] = inputArray[R];
                 }
 
+                // Find the first entry from the left that's larger than the piv key
                 while (inputArray[L].key <= piv && L < R) {
                     L++;
                 }
+
+                // If there is still more than two elements, i.e. there exists an entry on the left that's larger than the piv key
+                // move the one larger than the entry from the left to the right end
                 if (L < R) {
                     inputArray[R--] = inputArray[L];
                 } 
+
             }
 
             inputArray[L].key = piv;
             inputArray[L].val = piv_val;
 
-            beg[i + 1] = L+1;
+            beg[i + 1] = L + 1;
             end[i + 1] = end[i];
-            end[i++] = L;
+            end[i++] = L; 
         }
+
         else{
             i--;
         }

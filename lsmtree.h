@@ -12,7 +12,7 @@ typedef struct tag_lsmTree lsmTree;
 int lsm_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks_per_level, int input_num_level_in_ram);
 
 /* Destructor */
-int lsm_free(lsmTree ** tree);
+int lsm_free(lsmTree ** treeRef);
 
 
 /********************	Basic Tree Operations ********************/
