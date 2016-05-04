@@ -16,6 +16,13 @@ lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, in
 /* Recursive implementation of MergeSort for node arrays*/
 int mergeSort_rec(lsmNode ** arrayRef, int array_size);
 
+/* In-place implementation of Quick Sort for node arrays*/
+int quickSort(lsmNode ** arrayRef, int array_size);
+
+
+
+
+/************************** Obsoleted **********************************/
 
 /* In-place implementation of MergeSort for node arrays*/
 int mergeSort(lsmNode ** arrayRef, int array_size);

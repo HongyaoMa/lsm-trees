@@ -3,6 +3,8 @@
 #include <assert.h>
 #include "lsmnode.h"
 
+// Maximum levels for the quick sort function
+#define QS_MAX_LEVELS 1000
 
 /* Merge two sorted arrays */
 lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2)
@@ -77,6 +79,77 @@ int mergeSort_rec(lsmNode ** arrayRef, int array_size){
 
     *arrayRef = sortedMerge(&leftArray, mid, &rightArray, array_size - mid);
 }
+
+/* In-place implementation of Quick Sort for node arrays*/
+// http://alienryderflex.com/quicksort/
+// https://en.wikipedia.org/wiki/Quicksort#C
+
+int quickSort(lsmNode ** arrayRef, int array_size){
+
+    printf("Here?\n");
+    int i = 0, L, R;
+    int beg[QS_MAX_LEVELS], end[QS_MAX_LEVELS];
+
+    beg[0] = 0;
+    end[0] = array_size;
+
+    keyType piv;
+    valueType piv_val;
+
+    lsmNode * inputArray = *arrayRef;
+
+    while(i >= 0){
+        
+        L = beg[i];
+        R = end[i] - 1;
+
+        if (L < R){
+            piv = inputArray[L].key;
+            piv_val = inputArray[L].val;
+
+            // TODO: what is this doing?
+            if (i == QS_MAX_LEVELS - 1){
+                return -1;
+            }
+
+            while(L < R){
+                while (inputArray[R].key >= piv && L < R) {
+                    R--;
+                }
+
+                if (L < R) {
+                    inputArray[L++] = inputArray[R];
+                }
+
+                while (inputArray[L].key <= piv && L < R) {
+                    L++;
+                }
+                if (L < R) {
+                    inputArray[R--] = inputArray[L];
+                } 
+            }
+
+            inputArray[L].key = piv;
+            inputArray[L].val = piv_val;
+
+            beg[i + 1] = L+1;
+            end[i + 1] = end[i];
+            end[i++] = L;
+        }
+        else{
+            i--;
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+/************************** Obsoleted **********************************/
 
 /* In-place implementation of MergeSort for node arrays*/
 // http://stackoverflow.com/questions/2571049/how-to-sort-in-place-using-the-merge-sort-algorithm

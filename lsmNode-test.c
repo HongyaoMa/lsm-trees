@@ -91,7 +91,7 @@ int main() {
 	}
 
 	// mergeSort_rec(&node_array, 10);
-	mergeSort(&node_array, 10);
+	quickSort(&node_array, 10);
 
 	printf("\n The soretd array is: \n");
 	for (i = 0; i<10; i++){
