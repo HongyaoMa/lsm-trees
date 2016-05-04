@@ -40,7 +40,6 @@ int get_c0_size(lsmTree * tree);
 /* Printing the C0 tree */
 int print_c0_tree(lsmTree * tree);
 
-// TODO
 /* Print the current status of the tree */
 int print_meta_data(lsmTree *tree);
 

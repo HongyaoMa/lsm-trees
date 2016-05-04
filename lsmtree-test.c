@@ -44,8 +44,9 @@ int main() {
 	old_value = update_with_key(testTree, 5, 500);
 	printf("The old value of key  is %ld\n", old_value);	
 
-	print_c0_tree(testTree);
-
+	// print_c0_tree(testTree);
+	
+	print_meta_data(testTree);
 
 	// Free the tree
 	lsm_free(&testTree);
