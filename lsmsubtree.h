@@ -8,8 +8,6 @@ typedef int bool;
 #define true 1
 #define false 0
 
-// TODO: move into .c file
-
 // The Node
 typedef struct tag_lsmNode lsmNode;
 

@@ -11,7 +11,6 @@
 int main() {
 
 	int i;
-
 	int maxSize = 6;
 
 	/* Basic functions 
