@@ -22,12 +22,19 @@ int main() {
 	
 	// Put data into the subtree
 	for (i = 0; i < maxSize-1; i++){
-		//subTree_put(&subTree, rand() % 10, random()%100);
-		subTree_put(&subTree, i, random()%100);
+		subTree_put(&subTree, rand() % 10, random()%100);
+		//subTree_put(&subTree, i, random()%100);
 	}
-	
+
 	// Set the tree to be sorted
-	set_subTree_sorted(&subTree);
+	// set_subTree_sorted(&subTree);
+
+	// Printing the tree information
+	print_full_subTree(subTree);
+	
+	// Sort the subtree
+	subTree_sort(&subTree);
+
 
 	// Trying to add another element to a full tree
 	// subTree_put(&subTree, 1, 1);

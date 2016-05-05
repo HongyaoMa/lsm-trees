@@ -8,6 +8,8 @@ typedef int bool;
 #define true 1
 #define false 0
 
+// TODO: move into .c file
+
 // The Node
 typedef struct tag_lsmNode{
     keyType key;
@@ -60,25 +62,26 @@ int print_full_subTree(lsmSubTree * subTree);
 
 
 
-
 /************************* Sorting & Merging **************************/
 
 /* Sorting a subTree using quick sort */
-int subTree_sort(lsmSubTree * subTree);
+int subTree_sort(lsmSubTree ** subTreeRef);
 
 
 /* Merging a number of subtrees */
-int subTree_merge(lsmSubTree ** subTrees, int num_subTrees);
+int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTrees, int num_subTrees);
 
 
 /************************* Utility Functions **************************/
 
+// TODO: move into .c file
+/* In-place implementation of Quick Sort for node arrays*/
+int quickSort(lsmNode *inputArray, int array_size);
 
 /* Merge two sorted arrays */
 lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2);
 
-/* In-place implementation of Quick Sort for node arrays*/
-int quickSort(lsmNode *inputArray, int array_size);
+
 
 
 /************************** Obsoleted **********************************/
