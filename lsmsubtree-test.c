@@ -16,6 +16,7 @@ int main() {
 	bool allocMemory = true;
 	bool isSorted = false;
 
+	/* Basic functions 
 	// Initialization of the subtree
 	lsmSubTree * subTree;
 	lsmSubTree_init(&subTree, maxSize, isSorted, allocMemory);
@@ -31,7 +32,7 @@ int main() {
 
 	// Printing the tree information
 	print_full_subTree(subTree);
-	
+
 	// Sort the subtree
 	subTree_sort(&subTree);
 
@@ -69,10 +70,62 @@ int main() {
 
 	// Free the subtree
 	lsmSubTree_free(&subTree);
+*/
+
+	/* Testing the merge sorted function */
+
+	lsmSubTree * subTree1;
+	lsmSubTree * subTree2;
+
+	lsmSubTree_init(&subTree1, maxSize, isSorted, allocMemory);
+	lsmSubTree_init(&subTree2, maxSize, isSorted, allocMemory);
+
+	// Put data into the subtree
+	for (i = 0; i < maxSize-1; i++){
+		subTree_put(&subTree1, rand() % 10, random()%100);
+		subTree_put(&subTree2, rand() % 10, random()%100);
+	}
+
+	// Set the tree to be sorted
+	// set_subTree_sorted(&subTree);
+
+	// Printing the tree information
+	printf("Printing subtree 1:\n");
+	print_full_subTree(subTree1);
+
+	printf("Printing subtree 2:\n");	
+	print_full_subTree(subTree2);
+
+	// Sort the subtree
+	subTree_sort(&subTree1);
+	subTree_sort(&subTree2);
+
+	// Printing the tree information
+	printf("Printing subtree 1:\n");
+	print_full_subTree(subTree1);
+
+	printf("Printing subtree 2:\n");	
+	print_full_subTree(subTree2);
 
 
+	lsmSubTree * mergedTree;
+	lsmSubTree ** subTrees = malloc(sizeof(lsmSubTree *) * 2);
 
+	* subTrees = subTree1;
+	* (subTrees+1) = subTree2;
 
+	/* Merging a number of subtrees */
+	subTree_merge(&mergedTree, subTrees, 2);
+
+	printf("Print the merged tree!\n");
+	print_full_subTree(mergedTree);
+
+	lsmSubTree_free(&mergedTree);
+	
+	// lsmSubTree_free(&subTree1);
+	// lsmSubTree_free(&subTree1);
+
+	free(subTrees);
 
 	/*
 

@@ -22,7 +22,7 @@ typedef struct tag_lsmSubTree{
 
 
 /* Initializer */
-int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, int isSorted, bool allocMemory){
+int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, bool isSorted, bool allocMemory){
     
     // Allocation for the subtree itself
     (*subTreeRef) = malloc(sizeof(lsmSubTree));
@@ -30,7 +30,7 @@ int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, int isSorted, b
     // Meta Data
     (*subTreeRef) -> current_size = 0;    
     (*subTreeRef) -> maxSize = input_maxSize;    
-    (*subTreeRef) -> isSorted = false;
+    (*subTreeRef) -> isSorted = isSorted;
 
     if (allocMemory) {
         (*subTreeRef) -> subTreeHead = malloc(sizeof(lsmNode) * input_maxSize); //TODO: catch memory exception
@@ -217,14 +217,92 @@ int subTree_sort(lsmSubTree ** subTreeRef){
 
 
 /* Merging a number of subtrees */
-int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTrees, int num_subTrees){
+int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTrees){
 
+    int i_subTree, totalSize = 0, result_ind = 0;
 
+    // Allocate memory to the temporary variables
+    lsmNode ** tree_heads = malloc(sizeof(lsmNode*) * num_subTrees);
+    int * subtree_sizes = malloc(sizeof(int) * num_subTrees);
+    
 
+    // Get the information from the tree and initialization of indices
+    for (i_subTree = 0; i_subTree < num_subTrees; i_subTree++){
+
+        tree_heads[i_subTree] = (*(subTreesRef + i_subTree)) -> subTreeHead;
+
+        subtree_sizes[i_subTree] = (*(subTreesRef + i_subTree)) -> current_size;
+        totalSize += subtree_sizes[i_subTree];
+
+              
+    }
+
+    // Initialization of the resulting tree
+    lsmSubTree_init(destRef, totalSize, true, false);
+    lsmNode *  result_TreeHead = (*destRef) -> subTreeHead;
+    (*destRef) -> current_size = totalSize;
+
+    if (num_subTrees == 2){
+        (*destRef) -> subTreeHead = sortedMerge(tree_heads, subtree_sizes[0], tree_heads+1, subtree_sizes[1]);
+    }
+    else{
+
+        int * inds = malloc(sizeof(int) * num_subTrees);
+        
+        for (i_subTree = 0; i_subTree < num_subTrees; i_subTree++){
+            inds[i_subTree] = 0;  
+        }
+
+        //TODO: merge multiple trees!
+
+        free(inds);
+    }
+    
+    free(tree_heads);
+    free(subtree_sizes);
+    
     return 0;
 }
 
 /******************************* Utility Functions **************************/
+
+/* Merge two sorted arrays */
+lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2)
+{
+
+    // Allocating memory for the result
+    lsmNode * destArray = malloc(sizeof(lsmNode) * (size1 + size2));  //TODO: check malloc exceptions
+
+    lsmNode * source1 = *source1Ref;
+    lsmNode * source2 = *source2Ref;
+
+    int ind1 = 0, ind2 = 0, ind_dest = 0;
+
+    while (ind1 < size1 && ind2 < size2){
+        if (source1[ind1].key <= source2[ind2].key){
+            destArray[ind_dest++] = source1[ind1++];
+        }
+        else{
+            destArray[ind_dest++] = source2[ind2++];       
+        }
+    }
+
+    while (ind1 < size1){
+        destArray[ind_dest++] = source1[ind1++];               
+    }
+
+    while (ind2 < size2){
+        destArray[ind_dest++] = source2[ind2++];
+    }
+
+    free(*source1Ref);
+    free(*source2Ref);
+    *source1Ref = NULL;
+    *source2Ref = NULL;
+
+    return destArray;
+}
+
 
 /* In-place implementation of Quick Sort for node arrays*/
 // http://alienryderflex.com/quicksort/
@@ -300,43 +378,4 @@ int quickSort(lsmNode * inputArray, int array_size){
     }
 
     return 0;
-}
-
-
-
-/* Merge two sorted arrays */
-lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2)
-{
-
-    // Allocating memory for the result
-    lsmNode * destArray = malloc(sizeof(lsmNode) * (size1 + size2));  //TODO: check malloc exceptions
-
-    lsmNode * source1 = *source1Ref;
-    lsmNode * source2 = *source2Ref;
-
-    int ind1 = 0, ind2 = 0, ind_dest = 0;
-
-    while (ind1 < size1 && ind2 < size2){
-        if (source1[ind1].key <= source2[ind2].key){
-            destArray[ind_dest++] = source1[ind1++];
-        }
-        else{
-            destArray[ind_dest++] = source2[ind2++];       
-        }
-    }
-
-    while (ind1 < size1){
-        destArray[ind_dest++] = source1[ind1++];               
-    }
-
-    while (ind2 < size2){
-        destArray[ind_dest++] = source2[ind2++];
-    }
-
-    free(*source1Ref);
-    free(*source2Ref);
-    *source1Ref = NULL;
-    *source2Ref = NULL;
-
-    return destArray;
 }

@@ -78,6 +78,7 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTrees, int num_subTrees
 /* In-place implementation of Quick Sort for node arrays*/
 int quickSort(lsmNode *inputArray, int array_size);
 
+
 /* Merge two sorted arrays */
 lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2);
 
