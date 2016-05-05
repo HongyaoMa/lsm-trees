@@ -41,7 +41,7 @@ valueType subTree_get(lsmSubTree * subTree, keyType key_to_get);
 
 
 /* Update the value for some key in the tree, return old value or -1 */
-valueType subTree_update(lsmSubTree * subTree, keyType key_to_update, valueType val_to_update);
+valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueType val_to_update);
 
 
 /* Delete a key from the tree, return value or -1*/
@@ -52,13 +52,26 @@ valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete);
 
 int get_subTree_size(lsmSubTree * subTree);
 
+int set_subTree_sorted(lsmSubTree ** subTreeRef);
+
 int print_subTree_info(lsmSubTree * subTree);
 
 int print_full_subTree(lsmSubTree * subTree);
 
 
 
-/************* Utility Functions **************/
+
+/************************* Sorting & Merging **************************/
+
+/* Sorting a subTree using quick sort */
+int subTree_sort(lsmSubTree * subTree);
+
+
+/* Merging a number of subtrees */
+int subTree_merge(lsmSubTree ** subTrees, int num_subTrees);
+
+
+/************************* Utility Functions **************************/
 
 
 /* Merge two sorted arrays */
@@ -69,6 +82,5 @@ int quickSort(lsmNode *inputArray, int array_size);
 
 
 /************************** Obsoleted **********************************/
-
 
 #endif

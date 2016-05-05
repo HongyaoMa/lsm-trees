@@ -16,7 +16,6 @@ typedef struct tag_lsmSubTree{
 } lsmSubTree;
 
 
-
 /* Initializer */
 int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, int isSorted, bool allocMemory){
     
@@ -53,6 +52,40 @@ int lsmSubTree_free(lsmSubTree ** subTreeRef){
 
 /************* Basic Subtree Operations **************/
 
+/* Find the location of a certain key. Return -1 if non-existant */
+int subTree_lookup(lsmSubTree *subTree, keyType key_to_lookup){
+
+    int i;
+
+    // If the Tree is not sorted --- searching from the newest element
+    if (!subTree -> isSorted){
+        for (i = subTree -> current_size - 1; i >= 0; i--){
+            if (subTree -> subTreeHead[i].key == key_to_lookup){
+                return i;
+            }
+        }
+    }
+    // Binary search on a sorted array
+    else{
+        int first = 0, last = subTree-> current_size-1, mid = (first+last)/2;
+        while(first <= last){
+            if (subTree-> subTreeHead[mid].key < key_to_lookup){
+                first = mid + 1;
+            }
+            else if (subTree-> subTreeHead[mid].key == key_to_lookup){
+                return mid;
+            }
+            else {
+                last = mid-1;
+            }
+            mid = (first+last)/2;
+        }
+    }
+
+    return -1;
+}
+
+
 /* Put a key and value pair into the tree */
 int subTree_put(lsmSubTree ** subTreeRef, keyType key_to_put, valueType val_to_put){
 
@@ -76,33 +109,28 @@ valueType subTree_get(lsmSubTree * subTree, keyType key_to_get){
 
     // TODO: do binary search for sorted trees
 
-    int i;
+    int ind = subTree_lookup(subTree, key_to_get);
 
-    // Look for the key in the c0 tree
-    for (i = subTree -> current_size-1; i >= 0; i--){
-        if (subTree -> subTreeHead[i].key == key_to_get){
-            return subTree -> subTreeHead[i].val;
-        }
-    }
-
-    return -1;
+    if (ind >= 0)
+        return subTree -> subTreeHead[ind].val;
+    else
+        return -1;    
 }
 
 /* Update the value for some key in the tree, return old value or -1 */
-valueType subTree_update(lsmSubTree * subTree, keyType key_to_update, valueType val_to_update){
+valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueType val_to_update){
 
-    int i;
+    int ind = subTree_lookup((* subTreeRef), key_to_update);
 
-    // Look for the key in the c0 tree
-    for (i = subTree -> current_size-1; i >= 0; i--){
-        if (subTree -> subTreeHead[i].key == key_to_update){
-            valueType tempVal = subTree -> subTreeHead[i].val;
-            subTree -> subTreeHead[i].val = val_to_update;
-            return tempVal;
-        }
-    }    
-
-    return -1;
+    if (ind >= 0){
+        valueType tempVal = (* subTreeRef) -> subTreeHead[ind].val;
+        (* subTreeRef) -> subTreeHead[ind].val = val_to_update;
+        return tempVal;        
+    }
+    else{
+        subTree_put(subTreeRef, key_to_update, val_to_update);
+        return -1;
+    }
 }
 
 
@@ -129,6 +157,12 @@ valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete){
 
 int get_subTree_size(lsmSubTree * subTree){
     return subTree -> current_size;
+}
+
+
+int set_subTree_sorted(lsmSubTree ** subTreeRef){
+
+    (* subTreeRef)->isSorted = true;
 }
 
 int print_subTree_info(lsmSubTree * subTree){
@@ -159,6 +193,13 @@ int print_full_subTree(lsmSubTree * subTree){
 
 
 
+/************************* Sorting & Merging **************************/
+
+
+
+
+
+/******************************* Utility Functions **************************/
 
 /* Merge two sorted arrays */
 lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2)

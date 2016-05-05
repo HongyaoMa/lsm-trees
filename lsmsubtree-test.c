@@ -12,7 +12,7 @@ int main() {
 
 	int i;
 
-	int maxSize = 5;
+	int maxSize = 6;
 	bool allocMemory = true;
 	bool isSorted = false;
 
@@ -21,9 +21,13 @@ int main() {
 	lsmSubTree_init(&subTree, maxSize, isSorted, allocMemory);
 	
 	// Put data into the subtree
-	for (i = 0; i < maxSize; i++){
-		subTree_put(&subTree, rand() % 10, random()%100);
+	for (i = 0; i < maxSize-1; i++){
+		//subTree_put(&subTree, rand() % 10, random()%100);
+		subTree_put(&subTree, i, random()%100);
 	}
+	
+	// Set the tree to be sorted
+	set_subTree_sorted(&subTree);
 
 	// Trying to add another element to a full tree
 	// subTree_put(&subTree, 1, 1);
@@ -43,8 +47,13 @@ int main() {
 
 	// Update the value with key 2 to 100
 	printf("\nUpdate the value with key 2 to 100");
-	subTree_update(subTree, 2, 100);
+	subTree_update(&subTree, 2, 100);
 	print_full_subTree(subTree);
+
+	// Update the value with key 3 to 33, which doesn't exist --- a new key is added
+	printf("\nUpdate the value with key 3 to 33, which doesn't exist");
+	subTree_update(&subTree, 3, 33);
+	print_full_subTree(subTree);	
 
 	// Delete the key 1
 	printf("\nDelete the key 1");
@@ -53,6 +62,9 @@ int main() {
 
 	// Free the subtree
 	lsmSubTree_free(&subTree);
+
+
+
 
 
 	/*
