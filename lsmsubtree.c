@@ -17,9 +17,16 @@ typedef struct tag_lsmSubTree{
 } lsmSubTree;
 
 
-/* In-place implementation of Quick Sort for node arrays*/
-// int quickSort(lsmNode *inputArray, int array_size);
+/************************* Utility Functions **************************/
 
+/* In-place implementation of Quick Sort for node arrays*/
+int quickSort(lsmNode *inputArray, int array_size);
+
+/* Merge two sorted arrays */
+lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2);
+
+
+/***************** Initializer and Destructor Functions *****************/
 
 /* Initializer */
 int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, bool isSorted, bool allocMemory){
@@ -55,7 +62,7 @@ int lsmSubTree_free(lsmSubTree ** subTreeRef){
 }
 
 
-/************* Basic Subtree Operations **************/
+/********************** Basic Subtree Operations ********************/
 
 /* Find the location of a certain key. Return -1 if non-existant */
 int subTree_lookup(lsmSubTree *subTree, keyType key_to_lookup){
@@ -187,7 +194,7 @@ int print_full_subTree(lsmSubTree * subTree){
 
     int i;
 
-    printf("\nPrinting the full subTree!\n");
+    // printf("\nPrinting the full subTree!\n");
     for (i=0; i < subTree -> current_size; i++){
         printf("%d, \t %ld\n",  subTree -> subTreeHead[i].key,  subTree -> subTreeHead[i].val);
     }

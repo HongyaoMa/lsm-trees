@@ -61,30 +61,13 @@ int print_subTree_info(lsmSubTree * subTree);
 int print_full_subTree(lsmSubTree * subTree);
 
 
-
 /************************* Sorting & Merging **************************/
 
 /* Sorting a subTree using quick sort */
 int subTree_sort(lsmSubTree ** subTreeRef);
 
-
 /* Merging a number of subtrees */
 int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTrees, int num_subTrees);
 
-
-/************************* Utility Functions **************************/
-
-// TODO: move into .c file
-/* In-place implementation of Quick Sort for node arrays*/
-int quickSort(lsmNode *inputArray, int array_size);
-
-
-/* Merge two sorted arrays */
-lsmNode* sortedMerge(lsmNode ** source1Ref, int size1, lsmNode ** source2Ref, int size2);
-
-
-
-
-/************************** Obsoleted **********************************/
 
 #endif

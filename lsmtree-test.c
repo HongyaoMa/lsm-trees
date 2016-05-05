@@ -6,15 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lsmtree.h"
-// #include "lsmsubtree.h"
 
 int main() {
-
-	/*
-	#ifdef _LSMSUBTREE_H
-		printf("SUBTREE DEFINED!\n");
-	#endif
-	*/
 
 	// maximum c0 size
 	int max_c0_size = 5;
@@ -33,35 +26,43 @@ int main() {
 
 	// Filling up the c0 tree, get size, and print the c0 tree
 	int i;
-	for (i=0; i < 30; i++){
+	for (i=0; i < 32; i++){
 		put_with_key(testTree, rand()%100, random());
 	}
 
-	// Print the full tree
-	print_full_subTree(testTree);
-	
-	/* 
-	// Testing get_c0_size
-	printf("Size of the C0 Tree is %d\n", get_c0_size(testTree));
-
-	// Testing print_c0_tree
-	print_c0_tree(testTree);
+	/*
+	// Print the meta data
+	print_meta_data(testTree);
 
 	// Testing get_with_key
-	printf("The value corresponding to key 846930886 is %ld\n", get_with_key(testTree, 846930886));
+	printf("\nTesting get_with_key\n");
+	printf("The value corresponding to key 86 is %ld\n", get_with_key(testTree, 86));
 	printf("The value corresponding to key 5 is %ld\n", get_with_key(testTree, 5));
 
+	// Print the full tree
+	print_RAM_tree(testTree);
+
 	// Testing update with key
-	valueType old_value = update_with_key(testTree, 846930886, 100);
-	printf("The old value of key 846930886 is %ld\n", old_value);
+	printf("\nTesting update_with_key\n");
+	valueType old_value = update_with_key(testTree, 86, 100);
+	printf("The old value of key 86 is %ld\n", old_value);
 
 	old_value = update_with_key(testTree, 5, 500);
-	printf("The old value of key  is %ld\n", old_value);	
+	printf("The old value of key 5 is %ld\n", old_value);	
 
-	// print_c0_tree(testTree);
+	// Print the full tree
+	print_RAM_tree(testTree);
+
+	// Testing the update function
+	printf("\nTesting the update function!\n");
+	put_with_key(testTree, rand()%100, random());
+
 	*/
 
+	// Print the meta data
 	print_meta_data(testTree);
+
+	// Print the full tree
 	print_RAM_tree(testTree);
 
 	// Free the tree
