@@ -15,6 +15,8 @@ typedef struct tag_lsmSubTree{
     bool isSorted;
 } lsmSubTree;
 
+
+
 /* Initializer */
 int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, int isSorted, bool allocMemory){
     
@@ -47,6 +49,115 @@ int lsmSubTree_free(lsmSubTree ** subTreeRef){
     free(* subTreeRef);
     return 0;
 }
+
+
+/************* Basic Subtree Operations **************/
+
+/* Put a key and value pair into the tree */
+int subTree_put(lsmSubTree ** subTreeRef, keyType key_to_put, valueType val_to_put){
+
+    // If the maximum size is reached
+    if ((* subTreeRef) -> current_size == (* subTreeRef) -> maxSize){
+        printf("The Tree is Full!!\n"); //TODO: Change to error message!
+        return -1;
+    }
+
+    // Put the key-value pair to the end of the tree
+    (* subTreeRef) -> subTreeHead[(* subTreeRef) -> current_size].key = key_to_put;
+    (* subTreeRef) -> subTreeHead[(* subTreeRef) -> current_size].val = val_to_put;
+    (* subTreeRef) -> current_size ++;
+
+    return 0;
+}
+
+
+/* Get the value with a key from the tree */
+valueType subTree_get(lsmSubTree * subTree, keyType key_to_get){
+
+    // TODO: do binary search for sorted trees
+
+    int i;
+
+    // Look for the key in the c0 tree
+    for (i = subTree -> current_size-1; i >= 0; i--){
+        if (subTree -> subTreeHead[i].key == key_to_get){
+            return subTree -> subTreeHead[i].val;
+        }
+    }
+
+    return -1;
+}
+
+/* Update the value for some key in the tree, return old value or -1 */
+valueType subTree_update(lsmSubTree * subTree, keyType key_to_update, valueType val_to_update){
+
+    int i;
+
+    // Look for the key in the c0 tree
+    for (i = subTree -> current_size-1; i >= 0; i--){
+        if (subTree -> subTreeHead[i].key == key_to_update){
+            valueType tempVal = subTree -> subTreeHead[i].val;
+            subTree -> subTreeHead[i].val = val_to_update;
+            return tempVal;
+        }
+    }    
+
+    return -1;
+}
+
+
+/* Delete a key from the tree, return value or -1*/
+valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete){
+    
+    int i;
+
+    // Look for the key in the c0 tree
+    for (i = subTree -> current_size-1; i >= 0; i--){
+        if (subTree -> subTreeHead[i].key == key_to_delete){
+            valueType tempVal = subTree -> subTreeHead[i].val;
+            subTree -> subTreeHead[i].val = -1;
+            return tempVal;
+        }
+    }    
+
+    return -1;    
+}
+
+
+
+/********************   Meta Data Related  & IO ********************/
+
+int get_subTree_size(lsmSubTree * subTree){
+    return subTree -> current_size;
+}
+
+int print_subTree_info(lsmSubTree * subTree){
+
+    printf("\nPrinting Information for the Subtree!\n");
+
+    printf("The current tree size is: %d\n", subTree -> current_size);
+    printf("The maximum tree size is: %d\n", subTree -> maxSize);
+    printf("If the tree is sorted? %d\n", subTree -> isSorted);
+
+}
+
+int print_full_subTree(lsmSubTree * subTree){
+
+    if (subTree -> current_size > 50){
+        printf("The tree is too big to be printed!\n");
+        return -1;
+    }
+
+    int i;
+
+    printf("\nPrinting the full subTree!\n");
+    for (i=0; i < subTree -> current_size; i++){
+        printf("%d, \t %ld\n",  subTree -> subTreeHead[i].key,  subTree -> subTreeHead[i].val);
+    }
+
+}
+
+
 
 
 /* Merge two sorted arrays */

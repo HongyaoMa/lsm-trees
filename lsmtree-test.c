@@ -28,6 +28,7 @@ int main() {
 	// The print_tree_param function
 	print_tree_param(testTree);
 
+
 	/************************* Basic Tree Manipulations ************************/
 
 	// Filling up the c0 tree, get size, and print the c0 tree
@@ -36,6 +37,9 @@ int main() {
 		put_with_key(testTree, rand()%100, random());
 	}
 
+	// Print the full tree
+	print_full_subTree(testTree);
+	
 	/* 
 	// Testing get_c0_size
 	printf("Size of the C0 Tree is %d\n", get_c0_size(testTree));

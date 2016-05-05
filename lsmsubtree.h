@@ -30,21 +30,35 @@ int lsmSubTree_free(lsmSubTree ** subTreeRef);
 /************* Basic Subtree Operations **************/
 
 /* Put a key and value pair into the tree */
-int subTree_put(lsmTree * tree, keyType key_to_put, valueType val_to_put);
+int subTree_put(lsmSubTree ** subTreeRef, keyType key_to_put, valueType val_to_put);
 
 
-/* Put a key and value pair into the tree */
-int subTree_get(lsmTree * tree, keyType key_to_put, valueType val_to_put);
+/* Find the location of a certain key. Return -1 if non-existant */
+int subTree_lookup(lsmSubTree *subTree, keyType key_to_lookup);
+
+/* Get the value with a key from the tree */
+valueType subTree_get(lsmSubTree * subTree, keyType key_to_get);
 
 
-/* Put a key and value pair into the tree */
-int subTree_update(lsmTree * tree, keyType key_to_put, valueType val_to_put);
+/* Update the value for some key in the tree, return old value or -1 */
+valueType subTree_update(lsmSubTree * subTree, keyType key_to_update, valueType val_to_update);
 
 
-/* Put a key and value pair into the tree */
-int subTree_delete(lsmTree * tree, keyType key_to_put, valueType val_to_put);
+/* Delete a key from the tree, return value or -1*/
+valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete);
 
 
+/********************   Meta Data Related  & IO ********************/
+
+int get_subTree_size(lsmSubTree * subTree);
+
+int print_subTree_info(lsmSubTree * subTree);
+
+int print_full_subTree(lsmSubTree * subTree);
+
+
+
+/************* Utility Functions **************/
 
 
 /* Merge two sorted arrays */

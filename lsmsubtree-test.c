@@ -16,10 +16,44 @@ int main() {
 	bool allocMemory = true;
 	bool isSorted = false;
 
-	lsmSubTree * subtree;
-	lsmSubTree_init(&subtree, maxSize, isSorted, allocMemory);
+	// Initialization of the subtree
+	lsmSubTree * subTree;
+	lsmSubTree_init(&subTree, maxSize, isSorted, allocMemory);
 	
-	lsmSubTree_free(&subtree);
+	// Put data into the subtree
+	for (i = 0; i < maxSize; i++){
+		subTree_put(&subTree, rand() % 10, random()%100);
+	}
+
+	// Trying to add another element to a full tree
+	// subTree_put(&subTree, 1, 1);
+
+	// Printing the tree information
+	print_subTree_info(subTree);
+
+	// Print the full tree
+	print_full_subTree(subTree);
+
+
+	// Get the value with key 2
+	printf("\nThe value corresponding to key 2 is %ld \n", subTree_get(subTree, 2));
+
+	// Get the value with key 7, which is non-existent
+	printf("\nThe value corresponding to key 7 is %ld \n", subTree_get(subTree, 7));
+
+	// Update the value with key 2 to 100
+	printf("\nUpdate the value with key 2 to 100");
+	subTree_update(subTree, 2, 100);
+	print_full_subTree(subTree);
+
+	// Delete the key 1
+	printf("\nDelete the key 1");
+	subTree_delete(subTree, 1);
+	print_full_subTree(subTree);
+
+	// Free the subtree
+	lsmSubTree_free(&subTree);
+
 
 	/*
 
