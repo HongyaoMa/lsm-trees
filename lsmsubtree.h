@@ -11,11 +11,7 @@ typedef int bool;
 // TODO: move into .c file
 
 // The Node
-typedef struct tag_lsmNode{
-    keyType key;
-    valueType val;
-} lsmNode;
-
+typedef struct tag_lsmNode lsmNode;
 
 // The lsmSubTree
 typedef struct tag_lsmSubTree lsmSubTree;

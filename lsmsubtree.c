@@ -16,6 +16,10 @@ typedef struct tag_lsmSubTree{
     bool isSorted;
 } lsmSubTree;
 
+typedef struct tag_lsmNode{
+    keyType key;
+    valueType val;
+} lsmNode;
 
 /************************* Utility Functions **************************/
 
