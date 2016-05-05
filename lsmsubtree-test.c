@@ -97,10 +97,13 @@ int main() {
 	printf("Printing subtree 2:\n");	
 	print_full_subTree(subTree2);
 
+	printf("Printing subtree 3:\n");	
+	print_full_subTree(subTree3);
 
 	// Sort the subtree
 	subTree_sort(&subTree1);
 	subTree_sort(&subTree2);
+	subTree_sort(&subTree3);
 
 	// Printing the tree information
 	printf("Printing subtree 1:\n");
@@ -109,16 +112,20 @@ int main() {
 	printf("Printing subtree 2:\n");	
 	print_full_subTree(subTree2);
 
+	printf("Printing subtree 3:\n");	
+	print_full_subTree(subTree3);	
+
 	// Create a pointer to trees as the input of the subTree_merge function
-	lsmSubTree ** subTrees = malloc(sizeof(lsmSubTree *) * 2);
+	lsmSubTree ** subTrees = malloc(sizeof(lsmSubTree *) * 3);
 	* subTrees = subTree1;
-	* (subTrees+1) = subTree2;
+	* (subTrees + 1) = subTree2;
+	* (subTrees + 2) = subTree3;
 
 	// Create a pointer to the merged tree, without any initialization
 	lsmSubTree * mergedTree;
 
 	// Merge the trees
-	subTree_merge(&mergedTree, subTrees, 2);
+	subTree_merge(&mergedTree, subTrees, 3);
 
 	printf("Print the merged tree!\n");
 	print_full_subTree(mergedTree);

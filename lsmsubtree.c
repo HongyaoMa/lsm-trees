@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <limits.h>
 #include "lsmsubtree.h"
 
 // Maximum levels for the quick sort function
@@ -141,18 +142,18 @@ valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueT
 /* Delete a key from the tree, return value or -1*/
 valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete){
     
-    int i;
+    // Look up the key in the tree
+    int ind = subTree_lookup(subTree, key_to_delete);
 
-    // Look for the key in the c0 tree
-    for (i = subTree -> current_size-1; i >= 0; i--){
-        if (subTree -> subTreeHead[i].key == key_to_delete){
-            valueType tempVal = subTree -> subTreeHead[i].val;
-            subTree -> subTreeHead[i].val = -1;
-            return tempVal;
-        }
-    }    
-
-    return -1;    
+    // If the key is found
+    if (ind >= 0){
+        valueType tempVal = subTree -> subTreeHead[ind].val;
+        subTree -> subTreeHead[ind].val = -1;
+        return tempVal;        
+    }
+    else{
+        return -1; 
+    }
 }
 
 /********************   Meta Data Related  & IO ********************/
@@ -225,25 +226,26 @@ int subTree_sort(lsmSubTree ** subTreeRef){
 int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTrees){
 
     // Counters
-    int i_subTree, totalSize = 0, ind_dest = 0;
+    int i, totalSize = 0, ind_dest = 0;
 
     // Allocate memory to the temporary variables
     lsmNode ** tree_heads = malloc(sizeof(lsmNode*) * num_subTrees);
     int * subtree_sizes = malloc(sizeof(int) * num_subTrees);
     int * inds = malloc(sizeof(int) * num_subTrees);
     
+
     // Get the information from the tree and initialization of indices
-    for (i_subTree = 0; i_subTree < num_subTrees; i_subTree++){
+    for (i = 0; i < num_subTrees; i++){
 
         // Heads of the subtrees
-        tree_heads[i_subTree] = (*(subTreesRef + i_subTree)) -> subTreeHead;
+        tree_heads[i] = (*(subTreesRef + i)) -> subTreeHead;
         
         // Sizes of the subtrees and the total size
-        subtree_sizes[i_subTree] = (*(subTreesRef + i_subTree)) -> current_size;
-        totalSize += subtree_sizes[i_subTree];
+        subtree_sizes[i] = (*(subTreesRef + i)) -> current_size;
+        totalSize += subtree_sizes[i];
 
         // Set the inds to be zero
-        inds[i_subTree] = 0; 
+        inds[i] = 0; 
     }
 
     // Initialization of the resulting tree, say it is sorted, and allocate memory
@@ -270,14 +272,58 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
     }
     // Merging multiple trees!
     else{
+
+        keyType min_key;
+        int min_tree;
+
+        bool trees_exhausted = false;
+
+        /* 
+        keyType * currentKeys =  malloc(sizeof(keyType) * num_subTrees);
+        // Put the head of thea tree in the temp counter;
+        for (i = 0; i < num_subTrees; i++){
+            currentKeys[i] = tree_heads[i][0].key;
+        }
+        */
         
+        while(!trees_exhausted){
+
+            // Initialization of the find minimum algorithm
+            min_key = INT_MAX;
+            min_tree = 0;
+
+            // Find the minimum of the trees TODO: Optimize the statements
+            for (i = 0; i < num_subTrees; i++){
+                if (inds[i] < subtree_sizes[i]){
+                    if (tree_heads[i][inds[i]].key <= min_key){
+                        min_key = tree_heads[i][inds[i]].key;
+                        min_tree = i;
+                    }
+                }
+            }
+
+            // Move the minimum to the destination
+            result_TreeHead[ind_dest++] = tree_heads[min_tree][inds[min_tree]++];
+
+            // Check if we have exhausted the tree
+            trees_exhausted = true;
+            for (i=0; i < num_subTrees; i++){
+                if (inds[i] < subtree_sizes[i]){
+                    trees_exhausted = false;
+                    break;
+                }
+            }
+        }
+        
+        // free(currentKeys);
     }
 
     // Free the temporary variables
     free(inds);
     free(tree_heads);
     free(subtree_sizes);
-    
+
+
     return 0;
 }
 
