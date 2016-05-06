@@ -14,6 +14,11 @@ Setup 1:
 		read: 1.74s
 		write: 0.14s
 
+	100M total (1.1GB), 1M test: 
+		construction (from file): 32
+		read: 44
+		write: 2.7		
+
 Setup 2:
 	int max_c0_size = 100k;
 	int max_level_in_ram = 13;
@@ -24,15 +29,25 @@ Setup 2:
 		read: 1.91s
 		write: 0.19s
 
+	100M total (1.1GB), 1M test: 
+		construction (from file): 48.21
+		read: 34.6
+		write: 1.81
+
 Setup 3:
 	int max_c0_size = 100k;
 	int max_level_in_ram = 13;
-	int num_blocks_per_level = 4;
+	int num_blocks_per_level = 8;
 
 	10M total (0.11GB), 1M test: 
 		construction (from file): 3.08s
 		read: 1.79s
 		write: 0.14s
+
+	100M total (1.1GB), 1M test: 
+		construction (from file): 34.34
+		read: 51.53
+		write: 4.38
 
 Setup 4:
 	int max_c0_size = 10k;
@@ -44,7 +59,22 @@ Setup 4:
 		read: 2.6s
 		write: 0.23s
 	
-Setup 4:
+	100M total (1.1GB), 1M test: 
+		construction (from file): 32
+		read: 48
+		write: 2.12
+
+Setup 5:
+	int max_c0_size = 500k;
+	int max_level_in_ram = 13;
+	int num_blocks_per_level = 2;
+
+	100M total (1.1GB), 1M test: 
+		construction (from file): 30
+		read: 31
+		write: 1.6
+
+Setup 6:
 	int max_c0_size = 1000k;
 	int max_level_in_ram = 13;
 	int num_blocks_per_level = 2;
@@ -54,5 +84,7 @@ Setup 4:
 		read: 1.33
 		write: 0.19
 
-
-	
+	100M total (1.1GB), 1M test: 
+		construction (from file): 29
+		read: 29
+		write: 1.6

@@ -19,7 +19,7 @@ int main() {
 	/*************************** Constructing the tree from input data ***************************/
 
 	// Construction of the tree
-	int max_c0_size = 1000000;
+	int max_c0_size = 100000;
 	int max_level_in_ram = 13;
 	int num_blocks_per_level = 2;
 	
@@ -35,8 +35,8 @@ int main() {
 	valueType inputValue;
 	FILE *fp;
 
-	int totalSize = 10000000;
-	fp = fopen("data/data_10Mpairs.csv","r");
+	int totalSize = 100000000;
+	fp = fopen("data/data_100Mpairs.csv","r");
 	if (fp == NULL){
 		fprintf(stderr, "Failed to open input data file!\n");
 	}
@@ -62,8 +62,8 @@ int main() {
 
 	// Read in the testing dataset
 
-	int testSize = 1000000;
-	fp = fopen("data/data_1Mpairs.csv","r");
+	int testSize = 10000000;
+	fp = fopen("data/data_10Mpairs.csv","r");
 
 	keyType * input_keys = malloc(sizeof(keyType) * testSize); 
 	valueType * input_vals = malloc(sizeof(valueType) * testSize); 
