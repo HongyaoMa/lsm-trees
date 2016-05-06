@@ -246,6 +246,15 @@ int subTree_sort(lsmSubTree ** subTreeRef)
 /* Merging a number of subtrees */
 int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTrees)
 {
+    // One tree --- trivial case:
+    if (num_subTrees == 1){
+        *destRef = * subTreesRef;
+        *subTreesRef = NULL;
+        return 0;
+    }
+
+    // If there are more than one trees to merge
+
     // Counters
     int i, totalSize = 0, ind_dest = 0;
 
@@ -347,6 +356,12 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
         }
         
         // free(currentKeys);
+    }
+
+    // Free the blocks that are in this level and set the pointers to NULL
+    for (i = 0; i < num_subTrees; i++){
+        lsmSubTree_free(subTreesRef + i);
+        *(subTreesRef + i) = NULL;
     }
 
     // Free the temporary variables

@@ -33,9 +33,6 @@ typedef struct tag_lsmTree{
 
 int treeUpdate(lsmTree * tree);
 
-/* Update the meta data on the empty levels and blocks */
-int update_empty_level_block(lsmTree * tree);
-
 
 /************************  Initializer and Destructor   ************************/
 /* Initializer */
@@ -341,18 +338,11 @@ int treeUpdate(lsmTree * tree){
     // Merge all the levels above the empty level
     for (i_level = empty_level - 1; i_level >= 0; i_level --)
     {
-
         // Merge the trees to the next level
         subTree_merge(tree -> ramTrees + (i_level+1) * max_blocks, tree -> ramTrees + i_level * max_blocks, max_blocks);
 
         // Set the number of blocks in this level to be 1
         tree -> num_blocks[i_level] = 1;
-
-        // Free the blocks that are in this level and set the pointers to NULL
-        for (i_block = 0; i_block < max_blocks; i_block++){
-            lsmSubTree_free(tree -> ramTrees + i_level * max_blocks + i_block);
-            *(tree -> ramTrees + i_level * max_blocks + i_block) = NULL;
-        }
     }
 
     // Sort the c0 tree w.r.t keys

@@ -1,7 +1,7 @@
-// Testing the lsmTree
+// Demo of the basic functions of the LSM tree
 // CS265 Project
 // Hongyao Ma
-// 05/03/2016
+// 05/05/2016
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +14,8 @@ int main() {
 	// Read the data from file
 	int totalSize = 32;
 	FILE *fp;
-	fp = fopen("/home/hma/Desktop/lsm-trees/data_32keys.csv","r");
+	//fp = fopen("/home/hma/Desktop/lsm-trees/data_32keys_largeKeys.csv","r");
+	fp = fopen("data/data_32pairs_largevals.csv","r");
 
 	keyType * input_keys = malloc(sizeof(keyType) * totalSize); 
 	valueType * input_vals = malloc(sizeof(valueType) * totalSize); 
@@ -24,6 +25,7 @@ int main() {
 		fscanf(fp, "%d, %ld", input_keys+i, input_vals+i);
 	}
 	fclose(fp);
+
 
 	/*************************** Constructing the tree***************************/
 	// maximum c0 size

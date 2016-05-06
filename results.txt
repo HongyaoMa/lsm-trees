@@ -1,0 +1,58 @@
+Test result for the lsm Tree
+CS 265 Project
+
+Hongyao Ma
+05/06/2016
+
+Setup 1:
+	int max_c0_size = 100k;
+	int max_level_in_ram = 13;
+	int num_blocks_per_level = 2;
+
+	10M total (0.11GB), 1M test: 
+		construction (from file): 2.81
+		read: 1.74s
+		write: 0.14s
+
+Setup 2:
+	int max_c0_size = 100k;
+	int max_level_in_ram = 13;
+	int num_blocks_per_level = 4;
+
+	10M total (0.11GB), 1M test: 
+		construction (from file): 3.04s
+		read: 1.91s
+		write: 0.19s
+
+Setup 3:
+	int max_c0_size = 100k;
+	int max_level_in_ram = 13;
+	int num_blocks_per_level = 4;
+
+	10M total (0.11GB), 1M test: 
+		construction (from file): 3.08s
+		read: 1.79s
+		write: 0.14s
+
+Setup 4:
+	int max_c0_size = 10k;
+	int max_level_in_ram = 13;
+	int num_blocks_per_level = 2;
+
+	10M total (0.11GB), 1M test: 
+		construction (from file): 2.87
+		read: 2.6s
+		write: 0.23s
+	
+Setup 4:
+	int max_c0_size = 1000k;
+	int max_level_in_ram = 13;
+	int num_blocks_per_level = 2;
+
+	10M total (0.11GB), 1M test: 
+		construction (from file): 2.7
+		read: 1.33
+		write: 0.19
+
+
+	
