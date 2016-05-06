@@ -59,6 +59,8 @@ int main() {
 
 	*/
 
+	// printf("Old value for updated key 1: %ld\n", update_with_key(testTree, 1, 5));
+
 	// Print the meta data
 	print_meta_data(testTree);
 

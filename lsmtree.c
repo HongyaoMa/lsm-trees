@@ -5,6 +5,7 @@
 #include "lsmtree.h"
 #include "lsmsubtree.h"
 
+
 typedef struct tag_lsmTree{
     
     // Parameters 
@@ -44,6 +45,10 @@ int lsmTree_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks
 
 	// Allocating memory for the tree itself
 	(* treeRef) = malloc(sizeof(lsmTree));
+    if ((* treeRef) == NULL){
+        fprintf(stderr, "The LSM Tree failed to initialize! \n");
+        return -1;
+    }
 
     // Parameters for the tree
     (* treeRef) -> max_blocks_per_level = input_num_blocks_per_level;
@@ -51,20 +56,31 @@ int lsmTree_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks
     (* treeRef) -> max_c0_size = input_max_c0_size;
 
     // Allocating memory to the c0 tree --- c0 tree is not sorted, but we do allocate memory
-    lsmSubTree_init(&((* treeRef) -> c0Tree), input_max_c0_size, false, true);
+    if (lsmSubTree_init(&((* treeRef) -> c0Tree), input_max_c0_size, false, true) != 0){
+        fprintf(stderr, "Initialization of the c0 tree failed!\n");
+        return -1;
+    }
 
     // Meta Data
     (* treeRef) -> c0_size = 0;
     (* treeRef) -> level_sizes = malloc(sizeof(int) * input_max_level_in_ram);
     (* treeRef) -> num_blocks = malloc(sizeof(int) * input_max_level_in_ram);
+    if ((* treeRef) -> level_sizes == NULL || (* treeRef) -> num_blocks == NULL){
+        fprintf(stderr, "LSM Tree Meta Data Failed to initialize!\n");
+        return -1;
+    }
 
     for (i = 0; i < input_max_level_in_ram; i++){
         (* treeRef) -> num_blocks[i] = 0;
-        (* treeRef) -> level_sizes[i] = pow(input_max_c0_size, i);
+        (* treeRef) -> level_sizes[i] = input_max_c0_size * pow(input_num_blocks_per_level, i);
     }  
 
     // Initialization of the trees in RAM
     (* treeRef) -> ramTrees = malloc(sizeof(lsmSubTree *) * input_num_blocks_per_level * input_max_level_in_ram);
+    if ((* treeRef) -> ramTrees == NULL){
+        fprintf(stderr, "Pointers to in-memory trees failed to initialize!\n");
+        return -1;
+    }    
     for (i=0; i < input_max_level_in_ram * input_num_blocks_per_level; i++){
         (* treeRef) -> ramTrees[i] = NULL;
     }
@@ -112,7 +128,11 @@ int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
 
     // Update the tree when c0 is full
     if (tree -> c0_size == tree -> max_c0_size){
-        treeUpdate(tree); //TODO: catch the abnormal return value
+        if (treeUpdate(tree)!= 0){
+            fprintf(stderr, "Failed to update the tree after putting the key!\n");
+            return -1;
+        }
+        
     }
 
     return 0;
@@ -130,23 +150,29 @@ valueType get_with_key(lsmTree * tree, keyType key_to_get){
 
 /* Update the value of a data entry with key_to_update */
 /* Return original value if the key is found */
-/* Returns -1 if the key is not found and a new key is inserted */
+/* Returns TOMBSTONE if the key is not found and a new key is inserted */
 valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update){
 
     // Look for the key from the c0 tree and update
     valueType c0ReturnVal = subTree_update(&(tree->c0Tree), key_to_update, val_to_update);
 
     // If the key is not found in the c0 tree 
-    if (c0ReturnVal == -1){
+    if (c0ReturnVal == TOMBSTONE){
 
         // add the size of the c0 tree by 1
         tree -> c0_size++;
 
         // check if the c0 tree is full
         if (tree -> c0_size == tree -> max_c0_size){
-            treeUpdate(tree);
+            if (treeUpdate(tree) != 0){
+                fprintf(stderr, "Failed to update the tree after adding the unfound key to update into the tree!\n");
+                return -1;
+            }
         }
         return c0ReturnVal;
+    }
+    else if (c0ReturnVal == -1){
+        fprintf(stderr, "The key is not found, and the c0 tree was full!\n");
     }
     else{
         return c0ReturnVal;
@@ -205,7 +231,7 @@ int print_RAM_tree(lsmTree * tree){
     printf("\nPrinting the Full Tree in RAM\n");
 
     // If the tree is too big to be printed
-    if (tree->max_c0_size > 20){
+    if (tree -> max_c0_size > 20){
         printf("The size of the tree is too big to be printed!\n");
         return -1;
     }
@@ -234,10 +260,12 @@ int print_RAM_tree(lsmTree * tree){
 /* Update the tree whenever the c0 tree is full */
 int treeUpdate(lsmTree * tree){
 
-    if (tree->c0_size < tree -> max_c0_size){
+    /*
+    if (tree -> c0_size < tree -> max_c0_size){
         printf("C0 tree is not full! No need to update the tree!\n"); //TODO: convert to error message?
         return -1;
     }
+    */
 
     int i_level, i_block;
 
@@ -292,7 +320,10 @@ int treeUpdate(lsmTree * tree){
     *(tree -> ramTrees) = tree -> c0Tree;
 
     // Re-initialize the c0 tree
-    lsmSubTree_init(&(tree -> c0Tree), tree->max_c0_size, false, true);
+    if (lsmSubTree_init(&(tree -> c0Tree), tree->max_c0_size, false, true) != 0){
+        fprintf(stderr, "Re-initialization of the c0 tree failed!\n");
+        return -1;
+    }
     tree -> c0_size = 0;
 
     return 0;

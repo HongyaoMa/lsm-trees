@@ -1,12 +1,6 @@
 #ifndef _LSMTREE_H
 #define _LSMTREE_H
-
-typedef int keyType;
-typedef long valueType;
-
-typedef int bool;
-#define true 1
-#define false 0
+#include "global.h"
 
 // typedef struct tag_lsmNode lsmNode;
 typedef struct tag_lsmTree lsmTree;
@@ -47,7 +41,6 @@ int print_c0_tree(lsmTree * tree);
 
 /* Print the full tree in RAM*/
 int print_RAM_tree(lsmTree * tree);
-
 
 
 #endif

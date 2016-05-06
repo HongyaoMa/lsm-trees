@@ -4,6 +4,7 @@
 #include <limits.h>
 #include "lsmsubtree.h"
 
+
 // Maximum levels for the quick sort function
 #define QS_MAX_LEVELS 1000
 
@@ -28,7 +29,6 @@ typedef struct tag_lsmSubTree{
 /* In-place implementation of Quick Sort for node arrays*/
 int quickSort(lsmNode *inputArray, int array_size);
 
-
 /***************** Initializer and Destructor Functions *****************/
 
 /* Initializer */
@@ -36,6 +36,10 @@ int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, bool isSorted, 
     
     // Allocation for the subtree itself
     (*subTreeRef) = malloc(sizeof(lsmSubTree));
+    if ((*subTreeRef) == NULL){
+        fprintf(stderr, "Subtree initialization failed!\n");
+        return -1;
+    }
 
     // Meta Data
     (*subTreeRef) -> current_size = 0;    
@@ -44,10 +48,15 @@ int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, bool isSorted, 
 
     if (allocMemory) {
         (*subTreeRef) -> subTreeHead = malloc(sizeof(lsmNode) * input_maxSize); //TODO: catch memory exception
+        if ((*subTreeRef) -> subTreeHead == NULL){
+            fprintf(stderr, "Subtree memory allocation failed!\n");
+            return -1;
+        }
     }
     else{
         (*subTreeRef) -> subTreeHead = NULL;
     }
+    return 0;
 }
 
 
@@ -82,7 +91,7 @@ int subTree_lookup(lsmSubTree *subTree, keyType key_to_lookup){
     }
     // Binary search on a sorted array
     else{
-        int first = 0, last = subTree-> current_size-1, mid = (first+last) / 2;
+        int first = 0, last = subTree-> current_size - 1, mid = (first+last) / 2;
         while(first <= last){
             if (subTree-> subTreeHead[mid].key < key_to_lookup){
                 first = mid + 1;
@@ -106,7 +115,7 @@ int subTree_put(lsmSubTree ** subTreeRef, keyType key_to_put, valueType val_to_p
 
     // If the maximum size is reached
     if ((* subTreeRef) -> current_size == (* subTreeRef) -> maxSize){
-        printf("The Tree is Full!!\n"); //TODO: Change to error message!
+        fprintf(stderr, "Attempt to add nodes to a full subtree!\n");
         return -1;
     }
 
@@ -127,10 +136,10 @@ valueType subTree_get(lsmSubTree * subTree, keyType key_to_get)
     if (ind >= 0)
         return subTree -> subTreeHead[ind].val;
     else
-        return -1;    
+        return TOMBSTONE;    
 }
 
-/* Update the value for some key in the tree, return old value or -1 */
+/* Update the value for some key in the tree, return old value or TOMBSTONE */
 valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueType val_to_update)
 {
     int ind = subTree_lookup((* subTreeRef), key_to_update);
@@ -141,13 +150,17 @@ valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueT
         return tempVal;        
     }
     else{
-        subTree_put(subTreeRef, key_to_update, val_to_update);
-        return -1;
+        // If the attempt to add the key to update failed
+        if (subTree_put(subTreeRef, key_to_update, val_to_update) == -1){
+            fprintf(stderr, "Failed to add the key to update that is not found into the tree!\n");
+        }
+        // If the key is successfully added
+        return TOMBSTONE;
     }
 }
 
 
-/* Delete a key from the tree, return value or -1*/
+/* Delete a key from the tree, return value or TOMBSTONE*/
 valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete)
 {    
     // Look up the key in the tree
@@ -156,11 +169,11 @@ valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete)
     // If the key is found
     if (ind >= 0){
         valueType tempVal = subTree -> subTreeHead[ind].val;
-        subTree -> subTreeHead[ind].val = -1;
+        subTree -> subTreeHead[ind].val = TOMBSTONE;
         return tempVal;        
     }
     else{
-        return -1; 
+        return TOMBSTONE; 
     }
 }
 
@@ -171,7 +184,8 @@ int get_subTree_size(lsmSubTree * subTree){
 }
 
 int set_subTree_sorted(lsmSubTree ** subTreeRef){
-    (* subTreeRef)->isSorted = true;
+    (* subTreeRef) -> isSorted = true;
+    return 0;
 }
 
 int print_subTree_info(lsmSubTree * subTree)
@@ -182,12 +196,14 @@ int print_subTree_info(lsmSubTree * subTree)
     printf("The maximum tree size is: %d\n", subTree -> maxSize);
     printf("If the tree is sorted? %d\n", subTree -> isSorted);
 
+    return 0;
+
 }
 
 int print_full_subTree(lsmSubTree * subTree)
 {
     if (subTree -> current_size > 50){
-        printf("The tree is too big to be printed!\n");
+        fprintf(stderr, "The tree is too big to be printed!\n");
         return -1;
     }
 
@@ -197,6 +213,8 @@ int print_full_subTree(lsmSubTree * subTree)
     for (i=0; i < subTree -> current_size; i++){
         printf("%d, \t %ld\n",  subTree -> subTreeHead[i].key,  subTree -> subTreeHead[i].val);
     }
+
+    return 0;
 }
 
 /************************* Sorting & Merging **************************/
@@ -220,8 +238,7 @@ int subTree_sort(lsmSubTree ** subTreeRef)
     }
     // If the subtree is already sorted: note: we don't do a check here
     else{
-        printf("The subtree is already sorted!\n"); //TODO: output error message!
-        return -1;
+        printf("Warning: the subtree is already sorted!\n"); 
     }
 
     return 0;
@@ -238,7 +255,12 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
     lsmNode ** tree_heads = malloc(sizeof(lsmNode*) * num_subTrees);
     int * subtree_sizes = malloc(sizeof(int) * num_subTrees);
     int * inds = malloc(sizeof(int) * num_subTrees);
-    
+
+    if (tree_heads == NULL || subtree_sizes == NULL || inds == NULL){
+        fprintf(stderr, "Auxilary variables for subTreeMerge failed to initialize!\n");
+        return -1;
+    }
+
 
     // Get the information from the tree and initialization of indices
     for (i = 0; i < num_subTrees; i++){
@@ -255,7 +277,12 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
     }
 
     // Initialization of the resulting tree, say it is sorted, and allocate memory
-    lsmSubTree_init(destRef, totalSize, true, true);
+    if (lsmSubTree_init(destRef, totalSize, true, true) != 0){
+        fprintf(stderr, "Initialization of the resulting merged tree failed\n");
+        return -1;
+    }
+    
+
     lsmNode *  result_TreeHead = (*destRef) -> subTreeHead;
     (*destRef) -> current_size = totalSize;
 
@@ -329,7 +356,6 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
     free(tree_heads);
     free(subtree_sizes);
 
-
     return 0;
 }
 
@@ -352,7 +378,6 @@ int quickSort(lsmNode * inputArray, int array_size)
     // Start wiht the full array
     beg[0] = 0;
     end[0] = array_size;
-
 
     while(i >= 0){
 

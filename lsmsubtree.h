@@ -1,12 +1,6 @@
 #ifndef _LSMSUBTREE_H
 #define _LSMSUBTREE_H
-
-typedef int keyType;
-typedef long valueType;
-
-typedef int bool;
-#define true 1
-#define false 0
+#include "global.h"
 
 // The Node
 typedef struct tag_lsmNode lsmNode;
