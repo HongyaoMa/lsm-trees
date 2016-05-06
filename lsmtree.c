@@ -330,7 +330,7 @@ int treeUpdate(lsmTree * tree){
         return -1;
     }
 
-    printf("The fist available level is %d \n", empty_level);
+    //printf("The fist available level is %d \n", empty_level);
 
     // Get space in the first block in level_available
     for (i_block = tree -> num_blocks[empty_level]; i_block > 0; i_block --){

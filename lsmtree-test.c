@@ -10,9 +10,9 @@
 int main() {
 
 	// maximum c0 size
-	int max_c0_size = 5;
-	int max_level_in_ram = 2;
-	int num_blocks_per_level = 2;
+	int max_c0_size = 10000;
+	int max_level_in_ram = 3;
+	int num_blocks_per_level = 3;
 	
 	// Initialization of the tree
 	lsmTree * testTree;
@@ -25,11 +25,10 @@ int main() {
 
 	// Filling up the c0 tree, get size, and print the c0 tree
 	int i;
-	for (i=0; i < 32; i++){
+	for (i=0; i < 320000; i++){
 		put_with_key(testTree, rand()%100, random());
 	}
 
-	
 	// Print the meta data
 	print_meta_data(testTree);
 

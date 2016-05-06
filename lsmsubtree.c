@@ -132,9 +132,12 @@ int subTree_put(lsmSubTree ** subTreeRef, keyType key_to_put, valueType val_to_p
 valueType subTree_get(lsmSubTree * subTree, keyType key_to_get)
 {
     int ind = subTree_lookup(subTree, key_to_get);
-
+    
+    // If the key is found, return the value
     if (ind >= 0)
         return subTree -> subTreeHead[ind].val;
+
+    // Otherwise: return the TOMBSTONE
     else
         return TOMBSTONE;    
 }
@@ -144,22 +147,13 @@ valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueT
 {
     int ind = subTree_lookup((* subTreeRef), key_to_update);
 
+    // If the key is found: return the original value
     if (ind >= 0){
         valueType tempVal = (* subTreeRef) -> subTreeHead[ind].val;
         (* subTreeRef) -> subTreeHead[ind].val = val_to_update;
         return tempVal;        
     }
-
-    /*
-    // Add the key and value pairs if the key is not found: not good!
-    else{
-        // If the attempt to add the key to update failed
-        if (subTree_put(subTreeRef, key_to_update, val_to_update) == -1){
-            fprintf(stderr, "Failed to add the key to update that is not found into the tree!\n");
-        }
-    }
-    */
-    
+    // Otherwise: return the TOMBSTONE
     return TOMBSTONE;
 }
 
@@ -169,7 +163,7 @@ valueType subTree_delete(lsmSubTree * subTree, keyType key_to_delete)
 {    
     // Look up the key in the tree
     int ind = subTree_lookup(subTree, key_to_delete);
-
+    
     // If the key is found
     if (ind >= 0){
         valueType tempVal = subTree -> subTreeHead[ind].val;
