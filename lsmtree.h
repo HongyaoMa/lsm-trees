@@ -24,6 +24,8 @@ valueType get_with_key(lsmTree * tree, keyType key_to_get);
 /* Update the value of a data entry with key_to_update */
 valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update);
 
+/* Delete a key-value pair from the tree */
+valueType delete_with_key(lsmTree * tree, keyType key_to_delete);
 
 /******************** I/O and Meta Data Related ********************/
 

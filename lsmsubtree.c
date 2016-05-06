@@ -149,14 +149,18 @@ valueType subTree_update(lsmSubTree ** subTreeRef, keyType key_to_update, valueT
         (* subTreeRef) -> subTreeHead[ind].val = val_to_update;
         return tempVal;        
     }
+
+    /*
+    // Add the key and value pairs if the key is not found: not good!
     else{
         // If the attempt to add the key to update failed
         if (subTree_put(subTreeRef, key_to_update, val_to_update) == -1){
             fprintf(stderr, "Failed to add the key to update that is not found into the tree!\n");
         }
-        // If the key is successfully added
-        return TOMBSTONE;
     }
+    */
+    
+    return TOMBSTONE;
 }
 
 

@@ -132,7 +132,6 @@ int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
             fprintf(stderr, "Failed to update the tree after putting the key!\n");
             return -1;
         }
-        
     }
 
     return 0;
@@ -141,43 +140,86 @@ int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
 /* Get the value of a data entry with key_to_get */
 /* Returns -1 if the key is not found or is already deleted */
 
-valueType get_with_key(lsmTree * tree, keyType key_to_get){
-
+valueType get_with_key(lsmTree * tree, keyType key_to_get)
+{
     // First, try getting from the c0 tree:
-    return subTree_get(tree->c0Tree, key_to_get);
-}
+    valueType retVal = subTree_get(tree -> c0Tree, key_to_get);
 
+    // If the key is found in the c0 tree
+    if (retVal  >= 0){
+        return retVal;
+    }
+    // Otherwis: look for the key in the other in ram trees
+    else{
+        int i_level, i_block;
+        for (i_level = 0; i_level < tree -> max_level_in_ram; i_level ++){
+            for (i_block = 0; i_block < tree-> num_blocks[i_level]; i_block++){
+                retVal = subTree_get(*(tree -> ramTrees + i_block + i_level*tree-> max_blocks_per_level), key_to_get);
+                if (retVal >= 0){
+                    return retVal;
+                }
+            }
+        }
+    }
+    // If the key is not in the ram trees either
+    return TOMBSTONE;
+}
 
 /* Update the value of a data entry with key_to_update */
 /* Return original value if the key is found */
 /* Returns TOMBSTONE if the key is not found and a new key is inserted */
-valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update){
-
+valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_to_update)
+{
     // Look for the key from the c0 tree and update
-    valueType c0ReturnVal = subTree_update(&(tree->c0Tree), key_to_update, val_to_update);
-
-    // If the key is not found in the c0 tree 
-    if (c0ReturnVal == TOMBSTONE){
-
-        // add the size of the c0 tree by 1
-        tree -> c0_size++;
-
-        // check if the c0 tree is full
-        if (tree -> c0_size == tree -> max_c0_size){
-            if (treeUpdate(tree) != 0){
-                fprintf(stderr, "Failed to update the tree after adding the unfound key to update into the tree!\n");
-                return -1;
+    valueType retVal = subTree_update(&(tree->c0Tree), key_to_update, val_to_update);
+    if (retVal >= 0){
+        return retVal;
+    }
+    // Otherwise: look for the key in the other trees in memory
+    else{
+        int i_level, i_block;
+        for (i_level = 0; i_level < tree->max_level_in_ram; i_level++){
+            for (i_block = 0; i_block < tree-> num_blocks[i_level]; i_block++){
+                retVal = subTree_update((tree -> ramTrees + i_block + i_level*tree-> max_blocks_per_level), key_to_update, val_to_update);
+                if (retVal >= 0){
+                    return retVal;
+                }
             }
         }
-        return c0ReturnVal;
-    }
-    else if (c0ReturnVal == -1){
-        fprintf(stderr, "The key is not found, and the c0 tree was full!\n");
-    }
-    else{
-        return c0ReturnVal;
     }
 
+    // If not found: put the key-value pair into the tree
+    if (put_with_key(tree, key_to_update, val_to_update)!= 0){
+        fprintf(stderr, "The key is not found, and putting in the key-value pair failed!\n");
+    }
+    else{
+        // If the key is not in the ram trees either but the put is successful
+        return TOMBSTONE;
+    }
+}
+
+/* Delete a key-value pair from the tree */
+valueType delete_with_key(lsmTree * tree, keyType key_to_delete)
+{
+    // First look for the key in the c0 tree
+    valueType retVal = subTree_delete(tree->c0Tree, key_to_delete);
+    if (retVal >= 0){
+        return retVal;
+    }
+    // Otherwise: look for the key in the other trees in memory
+    else{
+        int i_level, i_block;
+        for (i_level = 0; i_level < tree->max_level_in_ram; i_level++){
+            for (i_block = 0; i_block < tree-> num_blocks[i_level]; i_block++){
+                retVal = subTree_delete(*(tree -> ramTrees + i_block + i_level*tree-> max_blocks_per_level), key_to_delete);
+                if (retVal >= 0){
+                    return retVal;
+                }
+            }
+        }
+    }
+    // If the key is not found anyway
+    return TOMBSTONE;
 }
 
 /********************   Meta Data Related  & IO ********************/
