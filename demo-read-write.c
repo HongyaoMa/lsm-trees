@@ -21,7 +21,7 @@ int main() {
 	// Construction of the tree
 	int max_c0_size = 100000;
 	int max_level_in_ram = 13;
-	int num_blocks_per_level = 2;
+	int num_blocks_per_level = 4;
 	
 	// Initialization of the tree
 	lsmTree * testTree;
@@ -63,7 +63,7 @@ int main() {
 	// Read in the testing dataset
 
 	int testSize = 10000000;
-	fp = fopen("data/data_10Mpairs.csv","r");
+	fp = fopen("data/test_10Mpairs.csv","r");
 
 	keyType * input_keys = malloc(sizeof(keyType) * testSize); 
 	valueType * input_vals = malloc(sizeof(valueType) * testSize); 
