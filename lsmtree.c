@@ -193,6 +193,7 @@ valueType update_with_key(lsmTree * tree, keyType key_to_update, valueType val_t
         // If the key is not in the ram trees either but the put is successful
         return TOMBSTONE;
     }
+    return TOMBSTONE;
 }
 
 /* Delete a key-value pair from the tree */

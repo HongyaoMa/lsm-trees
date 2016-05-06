@@ -21,7 +21,7 @@ int main() {
 	// Construction of the tree
 	int max_c0_size = 100000;
 	int max_level_in_ram = 13;
-	int num_blocks_per_level = 4;
+	int num_blocks_per_level = 8;
 	
 	// Initialization of the tree
 	lsmTree * testTree;
