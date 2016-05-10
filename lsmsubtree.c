@@ -34,8 +34,10 @@ int quickSort(lsmNode *inputArray, int array_size);
 /* Initializer */
 int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, bool isSorted, bool allocMemory){
     
+
     // Allocation for the subtree itself
     (*subTreeRef) = malloc(sizeof(lsmSubTree));
+
     if ((*subTreeRef) == NULL){
         fprintf(stderr, "Subtree initialization failed!\n");
         return -1;
@@ -56,6 +58,7 @@ int lsmSubTree_init(lsmSubTree ** subTreeRef, int input_maxSize, bool isSorted, 
     else{
         (*subTreeRef) -> subTreeHead = NULL;
     }
+
     return 0;
 }
 
@@ -206,8 +209,6 @@ int print_full_subTree(lsmSubTree * subTree)
     }
 
     int i;
-
-    // printf("\nPrinting the full subTree!\n");
     for (i=0; i < subTree -> current_size; i++){
         printf("%d, \t %ld\n",  subTree -> subTreeHead[i].key,  subTree -> subTreeHead[i].val);
     }
@@ -241,6 +242,54 @@ int subTree_sort(lsmSubTree ** subTreeRef)
 
     return 0;
 }
+
+
+int twoWay_subTree_merge(lsmSubTree ** destRef, lsmSubTree ** subTreeRef1, lsmSubTree ** subTreeRef2)
+{
+
+    int ind1 = 0, ind2 = 0, ind_dest = 0;
+    int size1 = (* subTreeRef1) -> current_size;
+    int size2 = (* subTreeRef2) -> current_size;    
+
+    // Initialization of the resulting tree, say it is sorted, and allocate memory
+    if (lsmSubTree_init(destRef, size1 + size2, true, true) != 0){
+        fprintf(stderr, "Initialization of the resulting merged tree failed\n");
+        return -1;
+    }    
+
+    lsmNode *  result_TreeHead = (*destRef) -> subTreeHead;
+    (*destRef) -> current_size = size1 + size2;
+
+    lsmNode * treehead1 = (*subTreeRef1) -> subTreeHead;
+    lsmNode * treehead2 = (*subTreeRef2) -> subTreeHead;
+
+    // Simple case when there are only two blocks to merge
+      
+    while (ind1 < size1 && ind2 < size2){
+        if (treehead1[ind1].key <= treehead2[ind2].key){
+            result_TreeHead[ind_dest++] = treehead1[ind1 ++];
+        }
+        else{
+            result_TreeHead[ind_dest++] = treehead2[ind2 ++];       
+        }
+    }
+    while (ind1 < size1){
+        result_TreeHead[ind_dest++] = treehead1[ind1 ++];               
+    }
+    while (ind2 < size2 ){
+        result_TreeHead[ind_dest++] = treehead2[ ind2 ++];
+    }
+
+    // Free the original trees and set the pointers to NULL
+    lsmSubTree_free(subTreeRef1);
+    lsmSubTree_free(subTreeRef2);
+
+    *(subTreeRef1) = NULL;
+    *(subTreeRef2) = NULL;
+
+    return 0;
+}
+
 
 
 /* Merging a number of subtrees */
@@ -289,7 +338,6 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
         return -1;
     }
     
-
     lsmNode *  result_TreeHead = (*destRef) -> subTreeHead;
     (*destRef) -> current_size = totalSize;
 
@@ -317,14 +365,6 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
         int min_tree;
 
         bool trees_exhausted = false;
-
-        /* 
-        keyType * currentKeys =  malloc(sizeof(keyType) * num_subTrees);
-        // Put the head of thea tree in the temp counter;
-        for (i = 0; i < num_subTrees; i++){
-            currentKeys[i] = tree_heads[i][0].key;
-        }
-        */
         
         while(!trees_exhausted){
 
@@ -355,7 +395,6 @@ int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTreesRef, int num_subTr
             }
         }
         
-        // free(currentKeys);
     }
 
     // Free the blocks that are in this level and set the pointers to NULL

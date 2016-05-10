@@ -12,16 +12,17 @@
 int main() {
 
 	// maximum c0 size
-	int max_c0_size = 100000;
+	int max_c0_size = 5;
 	int max_level_in_ram = 13;
 	int num_blocks_per_level = 2;
-	
-	int datasize = 800000000;
-	// datasize = 800000000;
+	int level1_mult = 2;
+
+	// int datasize = 800000000;
+	int datasize = 58;
 
 	// Initialization of the tree
 	lsmTree * testTree;
-	lsmTree_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
+	lsmTree_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram, level1_mult);
 
 	// The print_tree_param function
 	print_tree_param(testTree);
@@ -37,7 +38,7 @@ int main() {
 	begin = clock();
 	
 	for (i=0; i < datasize; i++){
-		put_with_key(testTree, rand(), random());
+		put_with_key(testTree, rand()%100, random()%100);
 	}
 
 	// Recored the time
@@ -48,14 +49,15 @@ int main() {
 	// Print the meta data
 	print_meta_data(testTree);
 
-	/*
+	
 	// Print the full tree
 	print_RAM_tree(testTree);
-
+	
+	
 	// Testing get_with_key
 	printf("\nTesting get_with_key\n");
 	printf("The value corresponding to key 86 is %ld\n", get_with_key(testTree, 86));
-	printf("The value corresponding to key 5 is %ld\n", get_with_key(testTree, 5));
+	printf("The value corresponding to key 500 is %ld\n", get_with_key(testTree, 500));
 
 	// Testing update with key
 	printf("\nTesting update_with_key\n");
@@ -63,8 +65,8 @@ int main() {
 	printf("The old value of key 86 is %ld\n", old_value);
 	
 
-	old_value = update_with_key(testTree, 5, 500);
-	printf("The old value of key 5 is %ld\n", old_value);	
+	old_value = update_with_key(testTree, 500, 500);
+	printf("The old value of key 500 is %ld\n", old_value);	
 
 	// Print the full tree
 	print_RAM_tree(testTree);
@@ -78,8 +80,7 @@ int main() {
 
 	// Print the full tree
 	print_RAM_tree(testTree);
-	*/
-
+	
 	// Free the tree
 	lsmTree_free(&testTree);
 

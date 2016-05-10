@@ -57,5 +57,7 @@ int subTree_sort(lsmSubTree ** subTreeRef);
 /* Merging a number of subtrees */
 int subTree_merge(lsmSubTree** destRef, lsmSubTree ** subTrees, int num_subTrees);
 
+// Merging two subtrees
+int twoWay_subTree_merge(lsmSubTree ** destRef, lsmSubTree ** subTreeRef1, lsmSubTree ** subTreeRef2);
 
 #endif
