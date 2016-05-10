@@ -14,6 +14,7 @@ typedef struct tag_lsmTree{
     int max_level_in_ram;
     int level1_multiplier;
 
+
     // The c0 tree
     lsmSubTree * c0Tree;
   	
@@ -22,6 +23,7 @@ typedef struct tag_lsmTree{
 
     // Meta data
     int c0_size;            // current size of the c0 tree
+    int total_elements;    
     int * level_sizes;      // the sizes of the blocks in each level
     int * num_blocks;       // the number of blocks in each level
 
@@ -62,6 +64,7 @@ int lsmTree_init(lsmTree ** treeRef, int input_max_c0_size, int input_num_blocks
 
     // Meta Data
     (* treeRef) -> c0_size = 0;
+    (* treeRef) -> total_elements = 0;
     (* treeRef) -> level_sizes = malloc(sizeof(int) * input_max_level_in_ram);
     (* treeRef) -> num_blocks = malloc(sizeof(int) * input_max_level_in_ram);
     if ((* treeRef) -> level_sizes == NULL || (* treeRef) -> num_blocks == NULL){
@@ -126,7 +129,9 @@ int put_with_key(lsmTree * tree, keyType key_to_put, valueType val_to_put){
 
     // Put the value into the subtree and increase the size by one
     subTree_put(&(tree->c0Tree), key_to_put, val_to_put); //TODO: catch the abnormal return value
+
     tree -> c0_size++;
+    tree -> total_elements++;
 
     // Update the tree when c0 is full
     if (tree -> c0_size == tree -> max_c0_size){
@@ -254,6 +259,9 @@ int print_meta_data(lsmTree *tree){
 
     // Size of the c0 tree
     printf("The current size of the C0 tree is %d \n", tree -> c0_size);
+
+    // Total number of elements
+    printf("The total number of elements in the tree is %d \n", tree -> total_elements);
 
     // Number of existing block per level
     int i;
