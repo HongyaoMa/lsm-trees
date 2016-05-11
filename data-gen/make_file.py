@@ -4,13 +4,13 @@ n_lines = 1*10**8
 max_value = 10**10
 
 A = range(n_lines)
-A = np.random.permutation(A) + 6*n_lines
+A = np.random.permutation(A) + 9*n_lines
 B = np.random.randint(max_value, size=len(A))
 
 import time
 t0 = time.time()
 
-with open("output7.csv", 'w') as f:
+with open("output10.csv", 'w') as f:
     for i, b in zip(A, B):
         f.write('{}, {}\n'.format(i, b))
 
