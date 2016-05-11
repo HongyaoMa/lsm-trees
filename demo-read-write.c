@@ -10,22 +10,27 @@
 
 int main() {
 
+	// Testing data
+	// FILE * fp = fopen("data/data_100Mpairs.csv","r");
+	// FILE * fp_test = fopen("data/test_10Mpairs.csv","r");
 
+	FILE * fp = fopen("data/data_1Bpairs.csv","r");
+	FILE * fp_test = fopen("data/test_100Mpairs.csv","r");
 
-	fp = fopen("data/data_100Mpairs.csv","r");
-	fp_test = fopen("data/test_10Mpairs.csv","r");
-
-	// Construction of the tree
+	int totalSize 	= 1000000000;
+	int testSize 	= 100000000;
+	
+	// Parameters of the tree
 	int max_c0_size = 100000;
 	int max_level_in_ram = 13;
-	int num_blocks_per_level = 8;
-	int totalSize = 100000000;
+	int num_blocks_per_level = 2;
+	int level1_multiplier = 1;
 
 	/*************************** Constructing the tree from input data ***************************/
 
 	// Initialization of the tree
 	lsmTree * testTree;
-	lsmTree_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
+	lsmTree_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram, level1_multiplier);
 	// The print_tree_param function
 	print_tree_param(testTree);
 
@@ -33,7 +38,7 @@ int main() {
 	// Read the data
 	keyType inputKey;
 	valueType inputValue;
-	FILE *fp;
+
 
 
 	if (fp == NULL){
@@ -67,7 +72,7 @@ int main() {
 
 	// Read in the testing dataset
 
-	int testSize = 10000000;
+	
 
 
 	keyType * input_keys = malloc(sizeof(keyType) * testSize); 
