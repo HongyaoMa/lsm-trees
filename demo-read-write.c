@@ -13,12 +13,12 @@ int main() {
 	char input_file[] = "data/data_100Mpairs.csv";
 	char test_file[] = "data/test_10Mpairs.csv";
 
-	int totalSize 	= 100000000;
+	int totalSize 	= 100000000-1;
 	int testSize 	= 10000000;
 
 	// Parameters of the tree
-	int max_c0_size = 100000;
-	int max_level_in_ram = 15;
+	int max_c0_size = 100000000;
+	int max_level_in_ram = 18;
 	int num_blocks_per_level = 2;
 	int level1_multiplier = 1;
 
@@ -27,11 +27,13 @@ int main() {
 	FILE * fp_input = fopen(input_file,"r");	
 	if (fp_input == NULL){
 		fprintf(stderr, "Failed to open the input data file!\n");
+		return -1;
 	}
 
 	FILE * fp_test = fopen(test_file,"r");
 	if (fp_test == NULL){
 		fprintf(stderr, "Failed to open the testing data file!\n");
+		return -1;
 	}
 
 	// The timer:
