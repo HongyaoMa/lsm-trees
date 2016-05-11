@@ -9,7 +9,7 @@
 #include <time.h>
 #include <string.h>
 
-#define NUM_FILES 10
+#define NUM_FILES 8
 
 int main() {
 
@@ -60,7 +60,7 @@ int main() {
 		
 	}
 
-	fp_out = fopen("output_combined.csv","w");
+	fp_out = fopen("output_combined_800M.csv","w");
 	if (fp_out == NULL){
 		printf("Failed to create the output file!\n");
 	}

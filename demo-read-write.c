@@ -10,19 +10,19 @@
 
 int main() {
 
-	// The timer:
-	clock_t begin, end;
-	double time_spent;
 
-	int i;
 
-	/*************************** Constructing the tree from input data ***************************/
+	fp = fopen("data/data_100Mpairs.csv","r");
+	fp_test = fopen("data/test_10Mpairs.csv","r");
 
 	// Construction of the tree
 	int max_c0_size = 100000;
 	int max_level_in_ram = 13;
 	int num_blocks_per_level = 8;
-	
+	int totalSize = 100000000;
+
+	/*************************** Constructing the tree from input data ***************************/
+
 	// Initialization of the tree
 	lsmTree * testTree;
 	lsmTree_init(&testTree, max_c0_size, num_blocks_per_level, max_level_in_ram);
@@ -35,11 +35,16 @@ int main() {
 	valueType inputValue;
 	FILE *fp;
 
-	int totalSize = 100000000;
-	fp = fopen("data/data_100Mpairs.csv","r");
+
 	if (fp == NULL){
 		fprintf(stderr, "Failed to open input data file!\n");
 	}
+
+	// The timer:
+	clock_t begin, end;
+	double time_spent;
+
+	int i;
 
 	// Filling up the tree
 	begin = clock();	
@@ -63,7 +68,7 @@ int main() {
 	// Read in the testing dataset
 
 	int testSize = 10000000;
-	fp = fopen("data/test_10Mpairs.csv","r");
+
 
 	keyType * input_keys = malloc(sizeof(keyType) * testSize); 
 	valueType * input_vals = malloc(sizeof(valueType) * testSize); 
@@ -71,9 +76,9 @@ int main() {
 
 	// Read in the testing data
 	for (i = 0; i < testSize; i++){
-		fscanf(fp, "%d, %ld", input_keys+i, input_vals+i);
+		fscanf(fp_test, "%d, %ld", input_keys+i, input_vals+i);
 	}
-	fclose(fp);	
+	fclose(fp_test);	
 
 	printf("\n!!!!FINISHED READING TEST DATA!!!!\n");
 

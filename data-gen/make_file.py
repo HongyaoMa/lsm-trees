@@ -1,10 +1,10 @@
 import numpy as np
 
-n_lines = 1*10**1
-max_value = 10**2
+n_lines = 1*10**8
+max_value = 10**10
 
 A = range(n_lines)
-A = np.random.permutation(A) + 9*n_lines
+A = np.random.permutation(A) + 10*n_lines
 B = np.random.randint(max_value, size=len(A))
 
 import time
