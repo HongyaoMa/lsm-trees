@@ -1,0 +1,37 @@
+
+Printing the Parameters of the Tree!
+The maximum size of the C0 level is 100000 
+The level 1 blocks are 1 times as big as the C0 block
+The number of blocks per level is 2 
+The number of levels in RAM is 15 
+Construction of the tree with 100000000 elements took 34.292807 cpu seconds!
+Construction of the tree with 100000000 elements took 34.306844 cpu seconds!
+
+Printing the Meta Data of the Tree!
+The current size of the C0 tree is 0 
+The total number of elements in the tree is 100000000 
+There are 0 blocks in level 1;
+There are 2 blocks in level 2;
+There are 1 blocks in level 3;
+There are 2 blocks in level 4;
+There are 1 blocks in level 5;
+There are 2 blocks in level 6;
+There are 2 blocks in level 7;
+There are 2 blocks in level 8;
+There are 2 blocks in level 9;
+There are 0 blocks in level 10;
+There are 0 blocks in level 11;
+There are 0 blocks in level 12;
+There are 0 blocks in level 13;
+There are 0 blocks in level 14;
+There are 0 blocks in level 15;
+
+!!!!FINISHED READING TEST DATA!!!!
+
+Getting 10000000 elements from the tree with 100000000 elements took 73.089078 clock seconds!
+
+Getting 10000000 elements from the tree with 100000000 elements took 73.116604 seconds!
+
+Putting 10000000 elements to the tree with 100000000 elements took 3.762787 clock seconds!
+
+Putting 10000000 elements to the tree with 100000000 elements took 3.764545 seconds!
