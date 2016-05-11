@@ -44,5 +44,7 @@ int print_c0_tree(lsmTree * tree);
 /* Print the full tree in RAM*/
 int print_RAM_tree(lsmTree * tree);
 
+/* Check the size of the tree matches the total number in the subtrees */
+int check_treeSize(lsmTree * tree);
 
 #endif

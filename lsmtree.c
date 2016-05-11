@@ -23,7 +23,7 @@ typedef struct tag_lsmTree{
 
     // Meta data
     int c0_size;            // current size of the c0 tree
-    int total_elements;    
+    long total_elements;    
     int * level_sizes;      // the sizes of the blocks in each level
     int * num_blocks;       // the number of blocks in each level
 
@@ -261,7 +261,7 @@ int print_meta_data(lsmTree *tree){
     printf("The current size of the C0 tree is %d \n", tree -> c0_size);
 
     // Total number of elements
-    printf("The total number of elements in the tree is %d \n", tree -> total_elements);
+    printf("The total number of elements in the tree is %ld \n", tree -> total_elements);
 
     // Number of existing block per level
     int i;
@@ -304,6 +304,30 @@ int print_RAM_tree(lsmTree * tree){
     }
 
     return 0;
+}
+
+// Check the size of the tree matches the total number in the subtrees
+int check_treeSize(lsmTree * tree){
+
+    long totalSize  = 0;
+    totalSize += tree -> c0_size;
+    int i_level, i_block;
+
+    for(i_level = 0; i_level < tree -> max_level_in_ram; i_level++){
+        for (i_block = 0; i_block < tree-> num_blocks[i_level]; i_block++){
+            totalSize += get_subTree_size(tree -> ramTrees[i_level * tree -> max_blocks_per_level + i_block]);
+        }
+    }
+
+    // printf("The total size is %ld \n", totalSize);
+
+    if (totalSize ==  tree -> total_elements){
+        return 0;
+    }
+    else{
+        return -1;
+    }
+    
 }
 
 

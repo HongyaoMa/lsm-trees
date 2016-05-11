@@ -49,7 +49,9 @@ int main() {
 	// Print the meta data
 	print_meta_data(testTree);
 
-	
+	// Check that the tree size is consistent
+	// printf("The tree size is consistent (0 means consistent)? %d \n", check_treeSize(testTree));
+
 	// Print the full tree
 	print_RAM_tree(testTree);
 	
