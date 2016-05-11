@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <pthread.h>
-
 #include "lsmtree.h"
 
 typedef struct tag_lsm_get_arg{
@@ -120,17 +119,6 @@ int main() {
 	fclose(fp_test);	
 
 	printf("\nFinished reading testing data!\n");
-
-	/*
-	// Get!
-	begin = clock();
-	for (i = 0; i < testSize; i++){	
-		result_vals[i] = get_with_key(testTree, input_keys[i]);	
-	}
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	printf("\nGetting %d elements from the tree with %d elements took %f seconds!\n", testSize, totalSize, time_spent);	
-	*/ 
 
 	/************************************* Parallel Get ************************/
 

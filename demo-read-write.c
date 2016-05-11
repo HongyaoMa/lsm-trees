@@ -10,21 +10,35 @@
 
 int main() {
 
-	// Testing data
-	// FILE * fp = fopen("data/data_100Mpairs.csv","r");
-	// FILE * fp_test = fopen("data/test_10Mpairs.csv","r");
+	char input_file[] = "data/data_100Mpairs.csv";
+	char test_file[] = "data/test_10Mpairs.csv";
 
-	FILE * fp = fopen("data/data_800Mpairs.csv","r");
-	FILE * fp_test = fopen("data/test_80Mpairs.csv","r");
-
-	int totalSize 	= 800000000;
-	int testSize 	= 80000000;
+	int totalSize 	= 100000000;
+	int testSize 	= 10000000;
 
 	// Parameters of the tree
 	int max_c0_size = 100000;
 	int max_level_in_ram = 15;
 	int num_blocks_per_level = 2;
 	int level1_multiplier = 1;
+
+	/*************************** Preparation ***************************/
+
+	FILE * fp_input = fopen(input_file,"r");	
+	if (fp_input == NULL){
+		fprintf(stderr, "Failed to open the input data file!\n");
+	}
+
+	FILE * fp_test = fopen(test_file,"r");
+	if (fp_test == NULL){
+		fprintf(stderr, "Failed to open the testing data file!\n");
+	}
+
+	// The timer:
+	clock_t clock_begin, clock_end;
+	struct timeval  time_begin, time_end;
+
+	double clock_spent, time_spent;
 
 	/*************************** Constructing the tree from input data ***************************/
 
@@ -34,46 +48,36 @@ int main() {
 	// The print_tree_param function
 	print_tree_param(testTree);
 
-
 	// Read the data
 	keyType inputKey;
 	valueType inputValue;
 
-
-
-	if (fp == NULL){
-		fprintf(stderr, "Failed to open input data file!\n");
-	}
-
-	// The timer:
-	clock_t begin, end;
-	double time_spent;
-
 	int i;
 
 	// Filling up the tree
-	begin = clock();	
+	clock_begin = clock();
+	gettimeofday(&time_begin, NULL);
+
 	for (i=0; i < totalSize; i++){
-		fscanf(fp, "%d, %ld", &inputKey, &inputValue);		
+		fscanf(fp_input, "%d, %ld", &inputKey, &inputValue);		
 		put_with_key(testTree, inputKey, inputValue);	
 	}
-	fclose(fp);
+	fclose(fp_input);
 
 	// Recored the time
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	printf("Construction of the tree with %d elements took %f seconds!\n", totalSize, time_spent);
+	clock_end = clock();
+	gettimeofday(&time_end, NULL);
+
+	clock_spent = (double)(clock_end - clock_begin) / CLOCKS_PER_SEC;
+	time_spent = (double) (time_end.tv_usec - time_begin.tv_usec) / 1000000 + (double) (time_end.tv_sec - time_begin.tv_sec);
+	
+	printf("Construction of the tree with %d elements took %f cpu seconds!\n", totalSize, clock_spent);
+	printf("Construction of the tree with %d elements took %f cpu seconds!\n", totalSize, time_spent);
 
 	// Print the meta data
 	print_meta_data(testTree);
 
-
 	/*************************** Testing gets and puts ***************************/
-
-	// Read in the testing dataset
-
-	
-
 
 	keyType * input_keys = malloc(sizeof(keyType) * testSize); 
 	valueType * input_vals = malloc(sizeof(valueType) * testSize); 
@@ -88,25 +92,40 @@ int main() {
 	printf("\n!!!!FINISHED READING TEST DATA!!!!\n");
 
 	// Gets
-	begin = clock();	
+	clock_begin = clock();
+	gettimeofday(&time_begin, NULL);
+
 	for (i=0; i < testSize; i++){	
 		result_vals[i] = get_with_key(testTree, input_keys[i]);	
 	}
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+	// Recored the time
+	clock_end = clock();
+	gettimeofday(&time_end, NULL);
+
+	clock_spent = (double)(clock_end - clock_begin) / CLOCKS_PER_SEC;
+	time_spent = (double) (time_end.tv_usec - time_begin.tv_usec) / 1000000 + (double) (time_end.tv_sec - time_begin.tv_sec);
+	
+	printf("\nGetting %d elements from the tree with %d elements took %f clock seconds!\n", testSize, totalSize, clock_spent);
 	printf("\nGetting %d elements from the tree with %d elements took %f seconds!\n", testSize, totalSize, time_spent);
 
-
 	// Puts
-	begin = clock();	
+	clock_begin = clock();
+	gettimeofday(&time_begin, NULL);
+
 	for (i=0; i < testSize; i++){	
 		put_with_key(testTree, input_keys[i], input_vals[i]);	
 	}
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+	// Recored the time
+	clock_end = clock();
+	gettimeofday(&time_end, NULL);
+
+	clock_spent = (double)(clock_end - clock_begin) / CLOCKS_PER_SEC;
+	time_spent = (double) (time_end.tv_usec - time_begin.tv_usec) / 1000000 + (double) (time_end.tv_sec - time_begin.tv_sec);
+	
+	printf("\nPutting %d elements to the tree with %d elements took %f clock seconds!\n", testSize, totalSize, clock_spent);
 	printf("\nPutting %d elements to the tree with %d elements took %f seconds!\n", testSize, totalSize, time_spent);
-
-
 
 	// Free the memory
 	lsmTree_free(&testTree);
