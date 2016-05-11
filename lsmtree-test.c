@@ -18,7 +18,7 @@ int main() {
 	int level1_mult = 2;
 
 	// int datasize = 800000000;
-	int datasize = 58;
+	int datasize = 32;
 
 	// Initialization of the tree
 	lsmTree * testTree;

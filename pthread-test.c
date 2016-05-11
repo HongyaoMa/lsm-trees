@@ -29,7 +29,6 @@ int main()
     // Structure for the inputs
     arg_struct ** input_structs = malloc(sizeof(arg_struct*) * noOfThread);
 
-
     // Create the threads to do the work
     for(i =0; i < noOfThread; i++)
     {

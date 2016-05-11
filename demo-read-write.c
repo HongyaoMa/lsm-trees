@@ -14,15 +14,15 @@ int main() {
 	// FILE * fp = fopen("data/data_100Mpairs.csv","r");
 	// FILE * fp_test = fopen("data/test_10Mpairs.csv","r");
 
-	FILE * fp = fopen("data/data_1Bpairs.csv","r");
-	FILE * fp_test = fopen("data/test_100Mpairs.csv","r");
+	FILE * fp = fopen("data/data_800Mpairs.csv","r");
+	FILE * fp_test = fopen("data/test_80Mpairs.csv","r");
 
-	int totalSize 	= 1000000000;
-	int testSize 	= 100000000;
-	
+	int totalSize 	= 800000000;
+	int testSize 	= 80000000;
+
 	// Parameters of the tree
 	int max_c0_size = 100000;
-	int max_level_in_ram = 13;
+	int max_level_in_ram = 15;
 	int num_blocks_per_level = 2;
 	int level1_multiplier = 1;
 
