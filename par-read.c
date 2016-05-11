@@ -22,11 +22,11 @@ void *thread_get(void * arg_void_Ref);
 
 int main() {
 
-	char input_file[] = "data/data_100Mpairs.csv";
-	char test_file[] = "data/data_10Mpairs.csv";
+	char input_file[] = "data/data_800Mpairs.csv";
+	char test_file[] = "data/test_80Mpairs.csv";
 
-	int totalSize 	= 100000000;
-	int testSize 	= 10000000;
+	int totalSize 	= 800000000;
+	int testSize 	= 80000000;
 	
 	int num_threads = 8;
 
@@ -36,6 +36,17 @@ int main() {
 	int num_blocks_per_level = 2;
 	int level1_multiplier = 1;
 
+	/*************************** Preparation ***************************/
+
+	FILE * fp_input = fopen(input_file,"r");	
+	if (fp_input == NULL){
+		fprintf(stderr, "Failed to open the input data file!\n");
+	}
+
+	FILE * fp_test = fopen(test_file,"r");
+	if (fp_test == NULL){
+		fprintf(stderr, "Failed to open the testing data file!\n");
+	}
 
 	// The timer:
 	clock_t clock_begin, clock_end;
@@ -54,13 +65,6 @@ int main() {
 	// Read the data
 	keyType inputKey;
 	valueType inputValue;
-
-	FILE * fp_input = fopen(input_file,"r");	
-	if (fp_input == NULL){
-		fprintf(stderr, "Failed to open input data file!\n");
-	}
-
-
 
 	int i;
 
@@ -90,20 +94,30 @@ int main() {
 	// Print the full tree
 	print_RAM_tree(testTree);
 
+	printf("What happens if the printing fails? #1\n");
+
 	/*************************** Testing gets and parallel gets ***************************/
 
 	// Read in the testing dataset
 	keyType * input_keys = malloc(sizeof(keyType) * testSize); 
-	valueType * input_vals = malloc(sizeof(valueType) * testSize); 
+	// valueType * input_vals = malloc(sizeof(valueType) * testSize); 
 	valueType * result_vals = malloc(sizeof(valueType) * testSize); 
 	
+	printf("What happens if the printing fails? #2\n");
+
+	if (input_keys == NULL || result_vals == NULL){
+		fprintf(stderr, "Failed to allocate memory for the input and output variables!\n");
+		return -1;
+	}
+
+	printf("What happens if the printing fails? #3\n");
+
 	// Read in the testing data	
-	FILE * fp_test = fopen(test_file,"r");
+
 	for (i = 0; i < testSize; i++){
-		fscanf(fp_test, "%d, %ld", input_keys+i, input_vals+i);
+		fscanf(fp_test, "%d, %ld", input_keys+i, &inputValue);
 	}
 	fclose(fp_test);	
-
 
 	printf("\nFinished reading testing data!\n");
 
@@ -184,7 +198,7 @@ int main() {
     free(input_structs);
 	lsmTree_free(&testTree);
 	free(input_keys);
-	free(input_vals);
+	// free(input_vals);
 	free(result_vals);
 
 	return 0;
