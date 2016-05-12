@@ -33,7 +33,7 @@ int main() {
 	int totalSize 	= 100000000 - max_c0_size/2;
 	int testSize 	= 10000000;
 	
-	int num_threads = 12;
+	int num_threads = 1;
 
 	/*************************** Preparation ***************************/
 
@@ -196,11 +196,11 @@ void * thread_get(void * arg_void_Ref){
 
 	lsm_get_arg ** argRef = (lsm_get_arg **) arg_void_Ref;
 
-	printf("Thread id is = %d \n", (*argRef) -> thread_ind);
-	(*argRef) -> thread_ind = (*argRef) -> thread_ind*100;
+	//printf("Thread id is = %d \n", (*argRef) -> thread_ind);
+	//(*argRef) -> thread_ind = (*argRef) -> thread_ind*100;
 
-	printf("Thread block size is = %d \n", (*argRef) -> num_gets);
-	(*argRef) -> thread_ind = (*argRef) -> thread_ind*100;	
+	//printf("Thread block size is = %d \n", (*argRef) -> num_gets);
+	//(*argRef) -> thread_ind = (*argRef) -> thread_ind*100;	
 
 	int i;
 
