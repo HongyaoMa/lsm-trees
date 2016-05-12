@@ -9,9 +9,9 @@ close all;
 
 tic 
 
-num_pairs = 5*10^7;
+num_pairs = 1*10^6;
 
-total_size = 10^9;
+total_size = 10^7;
 
 keys = randperm(total_size, num_pairs)';
 
@@ -20,6 +20,6 @@ vals = randi(10^10, num_pairs, 1);
 toc
 
 % csvwrite('data_1Mkeys.csv', [keys, vals]);
-dlmwrite('test_50Moutof1B.csv',[keys, vals],'delimiter',',','precision',10)
+dlmwrite('test_1Mpairs.csv',[keys, vals],'delimiter',',','precision',10)
 
 toc
