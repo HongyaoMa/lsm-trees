@@ -21,19 +21,19 @@ void *thread_get(void * arg_void_Ref);
 
 int main() {
 
-	char input_file[] = "data/data_800Mpairs.csv";
-	char test_file[] = "data/test_80Mpairs.csv";
-
-	int totalSize 	= 800000000;
-	int testSize 	= 80000000;
-	
-	int num_threads = 8;
-
 	// Parameters of the tree
-	int max_c0_size = 100000;
-	int max_level_in_ram = 15;
+	int max_c0_size = 1000;
+	int max_level_in_ram = 25;
 	int num_blocks_per_level = 2;
-	int level1_multiplier = 1;
+	int level1_multiplier = 10;
+
+	char input_file[] = "data/data_100Mpairs.csv";
+	char test_file[] = "data/test_10Mpairs.csv";
+
+	int totalSize 	= 100000000 - max_c0_size/2;
+	int testSize 	= 10000000;
+	
+	int num_threads = 12;
 
 	/*************************** Preparation ***************************/
 
@@ -169,14 +169,14 @@ int main() {
 	clock_end = clock();
 	gettimeofday(&time_end, NULL);
 
-	// time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	// printf("\nParallelly getting %d elements from the tree with %d elements took %f seconds!\n", testSize, totalSize, time_spent);
-
 	clock_spent = (double)(clock_end - clock_begin) / CLOCKS_PER_SEC;
 	time_spent = (double) (time_end.tv_usec - time_begin.tv_usec) / 1000000 + (double) (time_end.tv_sec - time_begin.tv_sec);
 	
 	printf("Parallelly getting %d elements from the tree with %d elements took %f clock seconds!\n",  testSize, totalSize, clock_spent);
 	printf("Parallelly getting %d elements from the tree with %d elements took %f seconds!\n",  testSize, totalSize, time_spent);
+
+
+
 
 
 	// Free the memory
