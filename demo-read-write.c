@@ -10,7 +10,7 @@
 
 int main() {
 
-	int max_c0_size = 1000;
+	int max_c0_size = 500;
 
 	char input_file[] = "data/data_100Mpairs.csv";
 	char test_file[] = "data/test_10Mpairs.csv";
@@ -25,7 +25,7 @@ int main() {
 	// Parameters of the tree
 
 	int max_level_in_ram = 25;
-	int num_blocks_per_level = 12;
+	int num_blocks_per_level = 2;
 	int level1_multiplier = 10;
 
 	/*************************** Preparation ***************************/
