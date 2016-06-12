@@ -32,7 +32,7 @@ typedef struct tag_lsmTree{
 
 /************************   Utility Functions ************************/
 
-/* Update the tree everytime c0 is full*/
+/* Update the tree every time c0 is full*/
 
 int treeUpdate(lsmTree * tree);
 

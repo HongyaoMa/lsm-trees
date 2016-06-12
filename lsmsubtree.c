@@ -79,7 +79,7 @@ int lsmSubTree_free(lsmSubTree ** subTreeRef){
 
 /********************** Basic Subtree Operations ********************/
 
-/* Find the location of a certain key. Return -1 if non-existant */
+/* Find the location of a certain key. Return -1 if non-existent */
 int subTree_lookup(lsmSubTree *subTree, keyType key_to_lookup){
 
     int i;
