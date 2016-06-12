@@ -23,7 +23,7 @@ int lsmSubTree_free(lsmSubTree ** subTreeRef);
 int subTree_put(lsmSubTree ** subTreeRef, keyType key_to_put, valueType val_to_put);
 
 
-/* Find the location of a certain key. Return -1 if non-existant */
+/* Find the location of a certain key. Return -1 if non-existent */
 int subTree_lookup(lsmSubTree *subTree, keyType key_to_lookup);
 
 /* Get the value with a key from the tree */
